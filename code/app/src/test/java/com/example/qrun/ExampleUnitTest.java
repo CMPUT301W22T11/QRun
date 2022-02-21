@@ -1,4 +1,4 @@
-package com.example.simpleparadox.listycity;
+package com.example.qrun;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
