@@ -31,7 +31,5 @@ public class User {
         this.QrCodes.remove(QrCode);
     }
 
-//    public void deleteUser(){
-//
-//    }
+
 }
