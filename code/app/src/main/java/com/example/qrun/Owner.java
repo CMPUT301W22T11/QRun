@@ -1,6 +1,6 @@
 package com.example.qrun;
 
-public class Owner extends User{
+public class Owner extends UserOld {
     public Owner(int location, String username) {
         super(location, username);
     }

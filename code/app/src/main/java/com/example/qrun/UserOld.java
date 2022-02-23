@@ -1,12 +1,13 @@
 package com.example.qrun;
 
+
 import java.util.ArrayList;
 
-public class User {
+public class UserOld {
     private int location;
     private String username;
     private ArrayList<Integer> QrCodes;
-    public User(int location, String username){
+    public UserOld(int location, String username){
         this.location = location;
         this.username = username;
     }
@@ -30,6 +31,4 @@ public class User {
     public void deleteQRcodes(int QrCode){
         this.QrCodes.remove(QrCode);
     }
-
-
 }
