@@ -18,7 +18,7 @@ import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
 
 
-public class ScanningActivity extends AppCompatActivity {
+public class ScanningActivity extends AppCompatActivity implements AddQRPopup.OnFragmentInteractionListener{
 
     private static int CAMERA_REQUEST_CODE = 101;
 
@@ -48,10 +48,9 @@ public class ScanningActivity extends AppCompatActivity {
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
+                codeScanner.setScanMode(ScanMode.PREVIEW);
                 QR qr = new QR(result.getText());
-                String hexValue = QRCalculation.toHexString(result.getRawBytes());
-                long score = QRCalculation.calcScore(hexValue);
-                codeText.setText(String.valueOf(score));
+                new AddQRPopup().newInstance(qr).show(getSupportFragmentManager(), "Add QR");
 
             }
         });
@@ -84,5 +83,19 @@ public class ScanningActivity extends AppCompatActivity {
         codeScanner.releaseResources();
         super.onPause();
     }
+
+    @Override
+    public void onOkPressed(QR qr) {
+        codeScanner.setScanMode(ScanMode.CONTINUOUS);
+        codeScanner.startPreview();
+        codeText.setText(String.valueOf(qr.getPoints()));
+    }
+
+    @Override
+    public void onDiscard() {
+        codeScanner.setScanMode(ScanMode.CONTINUOUS);
+        codeScanner.startPreview();
+    }
+
 
 }
