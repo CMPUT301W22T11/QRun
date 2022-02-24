@@ -1,2 +1,4 @@
-package com.example.qrun;public class QR {
+package com.example.qrun;
+
+public class QR {
 }
