@@ -20,10 +20,16 @@ import com.google.zxing.Result;
 
 public class ScanningActivity extends AppCompatActivity implements AddQRPopup.OnFragmentInteractionListener{
 
+    public static int SCAN_MODE_POINTS = 1;
+    public static int SCAN_MODE_USER = 2;
+    public static int SCAN_MODE_STATUS = 3;
+
     private static int CAMERA_REQUEST_CODE = 101;
 
     private CodeScanner codeScanner;
 
+
+    private int scanMode;
 
 
     private CodeScannerView scannerView;
@@ -34,6 +40,9 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
+
+        //default scan mode is to scan for points
+        scanMode = (int) getIntent().getIntExtra(MainActivity.SCAN_MODE_KEY, SCAN_MODE_POINTS);
 
         scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
         codeText = findViewById(R.id.code_text);
@@ -49,8 +58,24 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
             @Override
             public void onDecoded(@NonNull Result result) {
                 codeScanner.setScanMode(ScanMode.PREVIEW);
-                QR qr = new QR(result.getText());
-                new AddQRPopup().newInstance(qr).show(getSupportFragmentManager(), "Add QR");
+                if(scanMode == SCAN_MODE_POINTS) {
+                    QR qr = new QR(result.getText());
+                    new AddQRPopup().newInstance(qr).show(getSupportFragmentManager(), "Add QR");
+                }
+                else if(scanMode == SCAN_MODE_USER) {
+                    QR qr = new QR(result.getText());
+
+                    //add more code here for handling user
+                    codeText.setText("Username : " + String.valueOf(qr.getCodeText()));
+
+                }
+                else if(scanMode == SCAN_MODE_STATUS) {
+                    QR qr = new QR(result.getText());
+
+                    //add more code here for handling status
+                    codeText.setText("User Status : " + String.valueOf(qr.getCodeText()));
+
+                }
 
             }
         });
