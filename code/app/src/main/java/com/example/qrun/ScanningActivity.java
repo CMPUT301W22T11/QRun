@@ -75,6 +75,7 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
                     Bitmap imageResource = QRGenerator.generateQRBitmap(qr.getCodeText(), getBaseContext());
 
                     makeQRImageTest(imageResource);
+                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
 
                 }
                 else if(scanMode == SCAN_MODE_STATUS) {
@@ -82,6 +83,7 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
 
                     //add more code here for handling status
                     codeText.setText("User Status : " + (qr.getCodeText()));
+                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
 
                 }
 
