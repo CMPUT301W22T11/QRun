@@ -23,14 +23,14 @@ public class AddQRPopup extends AppCompatDialogFragment {
     private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener{
-        void onOkPressed(QR qr);
+        void onOkPressed(QRGame qrGame);
         void onDiscard();
     }
 
-    public static AddQRPopup newInstance(QR qr){
+    public static AddQRPopup newInstance(QRGame qrGame){
         Bundle args = new Bundle();
 
-        args.putSerializable(QRCODE, qr);
+        args.putSerializable(QRCODE, qrGame);
         AddQRPopup popup = new AddQRPopup();
         popup.setArguments(args);
         return popup;
@@ -55,15 +55,15 @@ public class AddQRPopup extends AppCompatDialogFragment {
 
         pointsView = view.findViewById(R.id.points_view);
 
-        QR qr = (QR) getArguments().get(QRCODE);
+        QRGame qrGame = (QRGame) getArguments().get(QRCODE);
 
-        pointsView.setText("This QR code gives you " + String.valueOf(qr.getPoints()) + " points!!");
+        pointsView.setText("This QRGame code gives you " + String.valueOf(qrGame.getPoints()) + " points!!");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         return builder
                 .setView(view)
-                .setTitle("Add QR")
+                .setTitle("Add QRGame")
                 .setNegativeButton("Discard", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -73,7 +73,7 @@ public class AddQRPopup extends AppCompatDialogFragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.onOkPressed(qr);
+                        listener.onOkPressed(qrGame);
                     }
                 }).create();
 

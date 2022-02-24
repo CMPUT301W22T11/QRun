@@ -59,18 +59,18 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
             public void onDecoded(@NonNull Result result) {
                 codeScanner.setScanMode(ScanMode.PREVIEW);
                 if(scanMode == SCAN_MODE_POINTS) {
-                    QR qr = new QR(result.getText());
-                    new AddQRPopup().newInstance(qr).show(getSupportFragmentManager(), "Add QR");
+                    QRGame qrGame = new QRGame(result.getText());
+                    new AddQRPopup().newInstance(qrGame).show(getSupportFragmentManager(), "Add QRGame");
                 }
                 else if(scanMode == SCAN_MODE_USER) {
-                    QR qr = new QR(result.getText());
+                    QRUser qr = new QRUser(result.getText());
 
                     //add more code here for handling user
                     codeText.setText("Username : " + String.valueOf(qr.getCodeText()));
 
                 }
                 else if(scanMode == SCAN_MODE_STATUS) {
-                    QR qr = new QR(result.getText());
+                    QRUser qr = new QRUser(result.getText());
 
                     //add more code here for handling status
                     codeText.setText("User Status : " + String.valueOf(qr.getCodeText()));
@@ -110,10 +110,10 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
     }
 
     @Override
-    public void onOkPressed(QR qr) {
+    public void onOkPressed(QRGame qrGame) {
         codeScanner.setScanMode(ScanMode.CONTINUOUS);
         codeScanner.startPreview();
-        codeText.setText(String.valueOf(qr.getPoints()));
+        codeText.setText(String.valueOf(qrGame.getPoints()));
     }
 
     @Override
