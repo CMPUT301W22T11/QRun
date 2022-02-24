@@ -5,8 +5,10 @@ package com.example.qrun;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.budiyev.android.codescanner.AutoFocusMode;
@@ -35,6 +37,7 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
     private CodeScannerView scannerView;
 
     private TextView codeText;
+    private ImageView qrImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
 
         scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
         codeText = findViewById(R.id.code_text);
+        qrImage = findViewById(R.id.qr_code);
         codeScanner = new CodeScanner(this, scannerView);
         codeScanner.setCamera(CodeScanner.CAMERA_BACK);
         codeScanner.setFormats(CodeScanner.ALL_FORMATS);
@@ -66,14 +70,18 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
                     QRUser qr = new QRUser(result.getText());
 
                     //add more code here for handling user
-                    codeText.setText("Username : " + String.valueOf(qr.getCodeText()));
+                    codeText.setText("Username : " + (qr.getCodeText()));
+
+                    Bitmap imageResource = QRGenerator.generateQRBitmap(qr.getCodeText(), getBaseContext());
+
+                    makeQRImageTest(imageResource);
 
                 }
                 else if(scanMode == SCAN_MODE_STATUS) {
                     QRUser qr = new QRUser(result.getText());
 
                     //add more code here for handling status
-                    codeText.setText("User Status : " + String.valueOf(qr.getCodeText()));
+                    codeText.setText("User Status : " + (qr.getCodeText()));
 
                 }
 
@@ -122,5 +130,13 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
         codeScanner.startPreview();
     }
 
+    public void makeQRImageTest(Bitmap bitmap){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                qrImage.setImageBitmap(bitmap);
+            }
+        });
+    }
 
 }

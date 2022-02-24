@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = new Intent(this, ScanningActivity.class);
-        intent.putExtra(SCAN_MODE_KEY, ScanningActivity.SCAN_MODE_POINTS);
+        intent.putExtra(SCAN_MODE_KEY, ScanningActivity.SCAN_MODE_USER);
         startActivity(intent);
     }
 }
