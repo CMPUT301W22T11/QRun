@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class User {
     private ArrayList<QR> qrStore = new ArrayList<QR>() ;
     private QR qrGameStatus;
-    private int location;
+    private Location location;
     private String username;
-    private ArrayList<Integer> QrCodes;
-    public User(int location, String username){
+
+    public User(Location location, String username){
         this.location = location;
         this.username = username;
     }
@@ -32,16 +32,16 @@ public class User {
     public void setQrGameStatus(QR qr){
         qrGameStatus = qr;
     }
-    public QR getQR(){
-        return qrCode;
+    public QR getQRGameStatus(){
+        return qrGameStatus;
     }
 
 
-    public int getLocation(){
+    public Location getLocation(){
         return location;
     }
 
-    public void setLocation(int location){
+    public void setLocation(Location location){
         this.location = location;
     }
 
