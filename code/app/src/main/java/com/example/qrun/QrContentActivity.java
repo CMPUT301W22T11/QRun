@@ -2,6 +2,7 @@ package com.example.qrun;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,10 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.qrun.Fragment.AddCommentFragment;
+import com.example.qrun.Fragment.CommentViewFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.example.qrun.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QrContentActivity extends AppCompatActivity implements AddCommentFragment.OnFragmentInteractionListener {
+public class QrContentActivity extends AppCompatActivity implements AddCommentFragment.OnFragmentInteractionListener, Storage.StoreOnComplete, CommentViewFragment.OnFragmentInteractionListener {
     private TextView commentTextView;
     ListView commentList;
     ArrayAdapter<Comment> commentAdapter;
@@ -99,6 +100,17 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
                 return true;
             }
         });
+        commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                tempComment = commentAdapter.getItem(i);
+                DialogFragment viewComment = new CommentViewFragment();
+                Bundle commentBundle = new Bundle();
+                commentBundle.putString("Comment", tempComment.getComment());
+                viewComment.setArguments(commentBundle);
+                viewComment.show(getSupportFragmentManager(),"view_comment");
+            }
+        });
 
 
     }
@@ -130,4 +142,14 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
 
     @Override
     public void onCancelPressed() {}
+
+    @Override
+    public void addFin(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void onFinishPressed() {
+
+    }
 }
