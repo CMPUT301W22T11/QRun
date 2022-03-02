@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qrun.Fragment.AddCommentFragment;
 import com.example.qrun.Fragment.CommentViewFragment;
@@ -39,7 +40,7 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
     FirebaseFirestore db;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
-    String userEmail = user.getEmail();//use user email as reference for now
+    String uid = user.getUid();//use user email as reference for now
     Map<String, Object> comments = new HashMap<>();
     DocumentReference QrRef = db.collection("QR").document(QRid);
 
@@ -63,7 +64,7 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
 
             }
         });
-        commentList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        commentList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//set up long click to delete selected comment
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -71,29 +72,32 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
                         .setMessage("Do you want to delete the String?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int i)
-                            {
-                                tempComment=commentContentList.get(i);
-                                commentContentList.remove(i);
-                                comments.put("comments",commentContentList);
-                                QrRef
-                                        .update(comments)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                // These are a method which gets executed when the task is succeeded
-                                                Log.d("comments updated", "Document is successfully added!");
-                                                commentAdapter.notifyDataSetChanged();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                // These are a method which gets executed if there’s any problem
-                                                Log.w("comments update failed", "Error updating document", e);
-                                                commentContentList.add(tempComment);
-                                            }
-                                        });
+                            public void onClick(DialogInterface dialog, int i) {
+                                if (uid != commentContentList.get(i).getUid()) {
+                                    Toast.makeText(getApplicationContext(), "You can't delete other's comment", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    tempComment = commentContentList.get(i);
+                                    commentContentList.remove(i);
+                                    comments.put("comments", commentContentList);
+                                    QrRef
+                                            .update(comments)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // These are a method which gets executed when the task is succeeded
+                                                    Log.d("comments updated", "Document is successfully added!");
+                                                    commentAdapter.notifyDataSetChanged();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    // These are a method which gets executed if there’s any problem
+                                                    Log.w("comments update failed", "Error updating document", e);
+                                                    commentContentList.add(tempComment);
+                                                }
+                                            });
+                                }
                             }
                         })
                         .setNegativeButton("No" , null).show();
@@ -107,7 +111,7 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
                 DialogFragment viewComment = new CommentViewFragment();
                 Bundle commentBundle = new Bundle();
                 commentBundle.putString("Comment", tempComment.getComment());
-                viewComment.setArguments(commentBundle);
+                viewComment.setArguments(commentBundle);//these function will send selected comment text to view fragment
                 viewComment.show(getSupportFragmentManager(),"view_comment");
             }
         });

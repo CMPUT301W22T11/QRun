@@ -17,9 +17,9 @@ public class Comment {
         return uid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+//    public void setUid(String uid) {
+//        this.uid = uid;
+//    }
 
     public String getComment() {
         return comment;
