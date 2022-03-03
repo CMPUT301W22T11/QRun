@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/Camera"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="#FFFFFF"
@@ -12,7 +11,7 @@
         android:id="@+id/mapButton"
         android:layout_width="182dp"
         android:layout_height="46dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="76dp"
         android:text="Maps"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,29 +19,26 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/cameraButton"
-        android:layout_width="89dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="68dp"
-
-        android:background="#FFFFFF"
-        app:icon="@android:drawable/ic_menu_camera"
-        app:iconGravity="top"
-        app:iconTint="#2196F3"
-        app:layout_constraintBottom_toTopOf="@+id/mapButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ImageView
         android:id="@+id/qrCodeImage"
-        android:layout_width="237dp"
-        android:layout_height="331dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="283dp"
+        android:layout_height="310dp"
         app:layout_constraintBottom_toTopOf="@+id/cameraButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.552"
         app:srcCompat="@drawable/qrcode" />
+
+    <ImageButton
+        android:id="@+id/cameraButton"
+        android:layout_width="75dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="40dp"
+        android:onClick="cameraButton"
+        app:layout_constraintBottom_toTopOf="@+id/mapButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_action_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
