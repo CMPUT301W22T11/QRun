@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void nextPage(View v){
+        String userName = "mldang";
+
         Intent intent = new Intent (this, MainScreen.class);
+        intent.putExtra("userName",userName);
         startActivity(intent);
     }
 
