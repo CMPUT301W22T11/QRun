@@ -7,19 +7,17 @@ public class Comment {
 
     private String uid;
     private String comment;
+    private String qid;
 
-    public Comment(String uid, String comment) {
+    public Comment(String qid, String uid, String comment) {
         this.uid = uid;
         this.comment = comment;
+        this.qid = qid;
     }
 
     public String getUid() {
         return uid;
     }
-
-//    public void setUid(String uid) {
-//        this.uid = uid;
-//    }
 
     public String getComment() {
         return comment;
@@ -27,5 +25,9 @@ public class Comment {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getQid() {
+        return qid;
     }
 }

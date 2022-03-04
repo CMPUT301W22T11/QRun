@@ -14,7 +14,7 @@
         android:text="Comment" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_city_button"
+        android:id="@+id/add_comment_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
