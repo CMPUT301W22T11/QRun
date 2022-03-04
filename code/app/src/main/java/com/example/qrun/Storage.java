@@ -56,7 +56,7 @@ public class Storage {
                 }
             });
     }
-    public void update(String docName, @NonNull Map<String, Object> data, @NonNull StoreOnComplete comp) {
+    public void update(String docName, @NonNull HashMap<String, Object> data, @NonNull StoreOnComplete comp) {
         collectionReference.document(docName).update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -82,9 +82,11 @@ public class Storage {
                         comp.getFin(document.getData());
                     } else {
                         Log.d("Storage get()", "No such document");
+                        comp.getFin(null);
                     }
                 } else {
                     Log.d("Storage get()", "get failed with ", task.getException());
+                    comp.getFin(null);
                 }
             }
         });

@@ -3,6 +3,7 @@ package com.example.qrun;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,8 @@ public class SignupFragment extends DialogFragment {
                                 store.add(username, preData, (boolean isTrue) -> {
                                     if(isTrue) {
                                         listener.onOkPressed(username);
+
+
                                     }
                                     else {
                                         listener.onOkPressed(null);

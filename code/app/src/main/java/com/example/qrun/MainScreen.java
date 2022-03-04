@@ -32,13 +32,14 @@ public class MainScreen extends AppCompatActivity {
         UserStorage userStorage = new UserStorage(db);
 
 
-//        userStorage.get(userName, (data)->{
-//                    if(data!=null){
-//                        Log.d("fqwfqwf",data.toString());
-//                    }
-//                }
+        userStorage.get(userName, (data)->{
+                    if(data!=null){
+                        String x = (String) data.get("email");
+                        Log.d("xx",x);
+                    }
+                }
 
-//                );
+                );
 
 
     }
