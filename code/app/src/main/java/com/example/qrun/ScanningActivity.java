@@ -5,11 +5,14 @@ package com.example.qrun;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -38,7 +41,28 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
 
     private TextView codeText;
     private ImageView qrImage;
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1011: {
 
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Here user granted the permission
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ScanningActivity.this, "Permission denied to read your Camera", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,35 +81,35 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
         codeScanner.setAutoFocusEnabled(true);
         codeScanner.setScanMode(ScanMode.CONTINUOUS);
         codeScanner.setFlashEnabled(false);
-
+        this.requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull Result result) {
                 codeScanner.setScanMode(ScanMode.PREVIEW);
-                if(scanMode == SCAN_MODE_POINTS) {
-                    QRGame qrGame = new QRGame(result.getText());
-                    new AddQRPopup().newInstance(qrGame).show(getSupportFragmentManager(), "Add QRGame");
-                }
-                else if(scanMode == SCAN_MODE_USER) {
-                    QRUser qr = new QRUser(result.getText());
-
-                    //add more code here for handling user
-                    codeText.setText("Username : " + (qr.getCodeText()));
-
-                    Bitmap imageResource = QRGenerator.generateQRBitmap(qr.getCodeText(), getBaseContext());
-
-                    makeQRImageTest(imageResource);
-                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
-
-                }
-                else if(scanMode == SCAN_MODE_STATUS) {
-                    QRUser qr = new QRUser(result.getText());
-
-                    //add more code here for handling status
-                    codeText.setText("User Status : " + (qr.getCodeText()));
-                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
-
-                }
+//                if(scanMode == SCAN_MODE_POINTS) {
+//                    QRGame qrGame = new QRGame(result.getText());
+//                    new AddQRPopup().newInstance(qrGame).show(getSupportFragmentManager(), "Add QRGame");
+//                }
+//                else if(scanMode == SCAN_MODE_USER) {
+//                    QRUser qr = new QRUser(result.getText());
+//
+//                    //add more code here for handling user
+//                    codeText.setText("Username : " + (qr.getCodeText()));
+//
+//                    Bitmap imageResource = QRGenerator.generateQRBitmap(qr.getCodeText(), getBaseContext());
+//
+//                    makeQRImageTest(imageResource);
+//                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
+//
+//                }
+//                else if(scanMode == SCAN_MODE_STATUS) {
+//                    QRUser qr = new QRUser(result.getText());
+//
+//                    //add more code here for handling status
+//                    codeText.setText("User Status : " + (qr.getCodeText()));
+//                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
+//
+//                }
 
             }
         });
