@@ -16,7 +16,6 @@ public class QRUser extends QR implements Serializable {
     QRUser(String Text){
         super(Text);
         this.Text = Text;
-
     }
 
 

@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -23,7 +25,7 @@ import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
 
 
-public class ScanningActivity extends AppCompatActivity implements AddQRPopup.OnFragmentInteractionListener{
+public class ScanningActivity extends AppCompatActivity {
 
     public static int SCAN_MODE_POINTS = 1;
     public static int SCAN_MODE_USER = 2;
@@ -41,6 +43,7 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
 
     private TextView codeText;
     private ImageView qrImage;
+    private Context ctx;
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -67,9 +70,10 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning);
+        ctx = this;
 
         //default scan mode is to scan for points
-        scanMode = (int) getIntent().getIntExtra(MainActivity.SCAN_MODE_KEY, SCAN_MODE_POINTS);
+//        scanMode = (int) getIntent().getIntExtra(MainActivity.SCAN_MODE_KEY, SCAN_MODE_POINTS);
 
         scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
         codeText = findViewById(R.id.code_text);
@@ -86,38 +90,19 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
             @Override
             public void onDecoded(@NonNull Result result) {
                 codeScanner.setScanMode(ScanMode.PREVIEW);
-//                if(scanMode == SCAN_MODE_POINTS) {
-//                    QRGame qrGame = new QRGame(result.getText());
-//                    new AddQRPopup().newInstance(qrGame).show(getSupportFragmentManager(), "Add QRGame");
-//                }
-//                else if(scanMode == SCAN_MODE_USER) {
-//                    QRUser qr = new QRUser(result.getText());
-//
-//                    //add more code here for handling user
-//                    codeText.setText("Username : " + (qr.getCodeText()));
-//
-//                    Bitmap imageResource = QRGenerator.generateQRBitmap(qr.getCodeText(), getBaseContext());
-//
-//                    makeQRImageTest(imageResource);
-//                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
-//
-//                }
-//                else if(scanMode == SCAN_MODE_STATUS) {
-//                    QRUser qr = new QRUser(result.getText());
-//
-//                    //add more code here for handling status
-//                    codeText.setText("User Status : " + (qr.getCodeText()));
-//                    codeScanner.setScanMode(ScanMode.CONTINUOUS);
-//
-//                }
-
+                Intent intent = new Intent();
+                intent.putExtra("QR", result.getText());
+                setResult(1, intent);
+                finish();
             }
         });
 
         codeScanner.setErrorCallback(new ErrorCallback() {
             @Override
             public void onError(@NonNull Exception error) {
-
+                Intent intent = new Intent();
+                setResult(2, intent);
+                finish();
             }
         });
 
@@ -130,7 +115,12 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(2, intent);
+        finish();
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -142,27 +132,4 @@ public class ScanningActivity extends AppCompatActivity implements AddQRPopup.On
         codeScanner.releaseResources();
         super.onPause();
     }
-
-    @Override
-    public void onOkPressed(QRGame qrGame) {
-        codeScanner.setScanMode(ScanMode.CONTINUOUS);
-        codeScanner.startPreview();
-        codeText.setText(String.valueOf(qrGame.getPoints()));
-    }
-
-    @Override
-    public void onDiscard() {
-        codeScanner.setScanMode(ScanMode.CONTINUOUS);
-        codeScanner.startPreview();
-    }
-
-    public void makeQRImageTest(Bitmap bitmap){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                qrImage.setImageBitmap(bitmap);
-            }
-        });
-    }
-
 }
