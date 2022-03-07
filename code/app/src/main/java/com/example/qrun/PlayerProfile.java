@@ -31,7 +31,7 @@ public class PlayerProfile extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             userName = extras.getString("userName");
-            Log.d("xx",userName);
+//            Log.d("xx",userName);
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
@@ -47,6 +47,18 @@ public class PlayerProfile extends AppCompatActivity {
                         nameTV.setText(name);
                         emailTV.setText(email);
                         telTV.setText(phone);
+                        long totalPoints = 0;
+                        long totalScanned = 0;
+                        Object temp = data.get("totalpoints");
+                        if(temp != null) {
+                            totalPoints = (long)temp;
+                        }
+                        temp = data.get("totalscannedqr");
+                        if(temp != null) {
+                            totalScanned = (long)temp;
+                        }
+                        totalNumQRTV.setText("Total # of QR codes Ranking: "+String.valueOf(totalScanned));
+                        totalSumQRTV.setText("Total Sum of QR codes Ranking: "+String.valueOf(totalPoints));
                     }
                 }
 
