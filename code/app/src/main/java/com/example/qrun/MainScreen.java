@@ -66,7 +66,7 @@ public class MainScreen extends AppCompatActivity {
             ac.launch(intent);
         });
         showProfileBut.setOnClickListener((l) -> {
-            Intent intent = new Intent(this, ShowPlayerProfile.class);
+            Intent intent = new Intent(this, QRGameListActivity.class);
             intent.putExtra("userName", userName);
             startActivity(intent);
         });

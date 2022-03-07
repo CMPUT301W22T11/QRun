@@ -3,18 +3,19 @@ package com.example.qrun;
 import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class to represent Scanned QRGame codes as a form of
  * Text, bytes, hexString and the points of the QRGame code
  */
 public class QRGame extends QR implements Serializable {
-
-
 
     private long points;
     private double lat, lon;
@@ -33,23 +34,16 @@ public class QRGame extends QR implements Serializable {
         this.path = path;
 
     }
-    public QRGame(String id) {
-        super(null, null);
-        QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
-        storage.get(id, (l) -> {
-            if(l != null) {
-                String username = (String)l.get("username");
-                String hexString = (String)l.get("hexString");
-                lat = Double.valueOf((String)l.get("latitude"));
-                lon = Double.valueOf((String)l.get("longitude"));
-                path = (String)l.get("PicPath");
-                points = Long.valueOf((String)l.get("points"));
-                this.hexString = hexString;
-                this.username = username;
-            }
-        });
+    public QRGame(QueryDocumentSnapshot id) {
+        super("", null);
+        Map<String, Object> l = id.getData();
+        this.username = (String)l.get("username");
+        this.hexString = (String)l.get("hexString");
+        this.lat = (double)l.get("latitude");
+        this.lon = (double)l.get("longitude");
+        this.path = (String)l.get("PicPath");
+        this.points = (long)l.get("points");
     }
-
     public void setPoints(long points) {
         this.points = points;
     }

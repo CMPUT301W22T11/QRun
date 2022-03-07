@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRun">
         <activity
+            android:name=".QRGameListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ShowPlayerProfile"
             android:exported="false" />
         <activity

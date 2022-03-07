@@ -46,6 +46,7 @@ public class AddGameQR extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isExist = false;
         setContentView(R.layout.activity_add_game_qr);
         ctx = this;
         cancelbut = findViewById(R.id.cancelbutton_id);
@@ -77,52 +78,55 @@ public class AddGameQR extends AppCompatActivity {
                 data.put("latitude", qr.getLat());
                 data.put("longitude", qr.getLon());
                 data.put("PicPath", qr.getPath());
-                storage.add(data, (isSuccess) -> {
-                    if(isSuccess) {
-                        Log.d("QRGame", "Created Successfully");
-                        user.get(username, (userData) -> {
-                            if(userData != null) {
-                                long totalPoints, totalScanned;
-                                Object temp = userData.get("totalpoints");
-                                if(temp == null) {
-                                    totalPoints = qr.getPoints();
-                                }
-                                else {
-                                    totalPoints = (long)temp;
-                                    totalPoints += qr.getPoints();
-                                }
-                                temp = userData.get("totalscannedqr");
-                                if(temp == null) {
-                                    totalScanned = 1;
-                                }
-                                else {
-                                    totalScanned = (long)temp;
-                                    totalScanned++;
-                                }
-                                userData.put("totalscannedqr", totalScanned);
-                                userData.put("totalpoints", totalPoints);
-                                user.update(username, userData, (isUserSuccess) -> {
-                                    if(isUserSuccess) {
-                                        Intent intent = new Intent();
-                                        setResult(1, intent);
-                                        finish();
-                                    }
-                                    else {
-                                       ErrorFinish();
+                storage.getCol().whereEqualTo("hexString", qr.getHexString())
+                        .get().addOnCompleteListener((callback) -> {
+                            if(callback.getResult() == null) {
+                                storage.add(data, (isSuccess) -> {
+                                    if(isSuccess) {
+                                        Log.d("QRGame", "Created Successfully");
+                                        user.get(username, (userData) -> {
+                                            if(userData != null) {
+                                                long totalPoints, totalScanned;
+                                                Object temp = userData.get("totalpoints");
+                                                if(temp == null) {
+                                                    totalPoints = qr.getPoints();
+                                                }
+                                                else {
+                                                    totalPoints = (long)temp;
+                                                    totalPoints += qr.getPoints();
+                                                }
+                                                temp = userData.get("totalscannedqr");
+                                                if(temp == null) {
+                                                    totalScanned = 1;
+                                                }
+                                                else {
+                                                    totalScanned = (long)temp;
+                                                    totalScanned++;
+                                                }
+                                                userData.put("totalscannedqr", totalScanned);
+                                                userData.put("totalpoints", totalPoints);
+                                                user.update(username, userData, (isUserSuccess) -> {
+                                                    if(isUserSuccess) {
+                                                        Intent intent = new Intent();
+                                                        setResult(1, intent);
+                                                        finish();
+                                                    }
+                                                    else {
+                                                        ErrorFinish();
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                ErrorFinish();
+                                            }
+                                        });
                                     }
                                 });
-
                             }
                             else {
                                 ErrorFinish();
                             }
                         });
-
-                    }
-                    else {
-                        ErrorFinish();
-                    }
-                });
             }
             else {
                 ErrorFinish();
