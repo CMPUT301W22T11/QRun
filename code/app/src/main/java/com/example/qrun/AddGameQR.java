@@ -13,9 +13,13 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class AddGameQR extends AppCompatActivity {
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
@@ -43,6 +47,7 @@ public class AddGameQR extends AppCompatActivity {
     private double lon = 0.0; //TODO: modify this when we have an actual map
     private String username;
     private Context ctx;
+    private long points = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,40 +83,44 @@ public class AddGameQR extends AppCompatActivity {
                 data.put("latitude", qr.getLat());
                 data.put("longitude", qr.getLon());
                 data.put("PicPath", qr.getPath());
-                storage.getCol().whereEqualTo("hexString", qr.getHexString())
-                        .get().addOnCompleteListener((callback) -> {
-                            if(callback.getResult() == null) {
-                                storage.add(data, (isSuccess) -> {
-                                    if(isSuccess) {
-                                        Log.d("QRGame", "Created Successfully");
+                // add data regardless
+                storage.add(data, (isSuccess) -> {
+                    if(isSuccess) {
+                        storage.getCol().whereEqualTo("hexString", qr.getHexString())
+                                .whereEqualTo("username", username)
+                                .get()
+                                .addOnCompleteListener((task) ->
+                                {
+                                    if(task.isSuccessful()) {
+
+                                        if(task.getResult().size() == 0) {
+                                            points = qr.getPoints();
+                                        }
                                         user.get(username, (userData) -> {
                                             if(userData != null) {
                                                 long totalPoints, totalScanned;
                                                 Object temp = userData.get("totalpoints");
-                                                if(temp == null) {
-                                                    totalPoints = qr.getPoints();
-                                                }
-                                                else {
-                                                    totalPoints = (long)temp;
-                                                    totalPoints += qr.getPoints();
+                                                if (temp == null) {
+                                                    totalPoints = points;
+                                                } else {
+                                                    totalPoints = (long) temp;
+                                                    totalPoints += points;
                                                 }
                                                 temp = userData.get("totalscannedqr");
-                                                if(temp == null) {
+                                                if (temp == null) {
                                                     totalScanned = 1;
-                                                }
-                                                else {
-                                                    totalScanned = (long)temp;
+                                                } else {
+                                                    totalScanned = (long) temp;
                                                     totalScanned++;
                                                 }
                                                 userData.put("totalscannedqr", totalScanned);
                                                 userData.put("totalpoints", totalPoints);
                                                 user.update(username, userData, (isUserSuccess) -> {
-                                                    if(isUserSuccess) {
+                                                    if (isUserSuccess) {
                                                         Intent intent = new Intent();
                                                         setResult(1, intent);
                                                         finish();
-                                                    }
-                                                    else {
+                                                    } else {
                                                         ErrorFinish();
                                                     }
                                                 });
@@ -121,12 +130,12 @@ public class AddGameQR extends AppCompatActivity {
                                             }
                                         });
                                     }
+                                    else {
+                                        ErrorFinish();
+                                    }
                                 });
-                            }
-                            else {
-                                ErrorFinish();
-                            }
-                        });
+                    }
+                });
             }
             else {
                 ErrorFinish();

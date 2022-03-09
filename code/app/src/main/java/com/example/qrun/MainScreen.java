@@ -37,7 +37,6 @@ public class MainScreen extends AppCompatActivity {
                 }
             }
     );
-    private Button showProfileBut; // TODO: Remove this when Zi's part complete
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
@@ -47,8 +46,6 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         Bundle extras = getIntent().getExtras();
         cameraBut = findViewById(R.id.cameraButton);
-        showProfileBut = findViewById(R.id.temp); // TODO: Remove this when Zi's part complete
-        showProfileBut.setText("Remove This!!!!");// TODO: Remove this when Zi's part complete
         if(extras != null){
             userName = extras.getString("userName");
             Log.d("xx",userName);
@@ -66,11 +63,6 @@ public class MainScreen extends AppCompatActivity {
             intent.putExtra("userName", userName);
             ac.launch(intent);
         });
-        showProfileBut.setOnClickListener((l) -> {
-            Intent intent = new Intent(this, QRGameListActivity.class);
-            intent.putExtra("userName", userName);
-            startActivity(intent);
-        });
 
     }
     @Override
@@ -82,12 +74,19 @@ public class MainScreen extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.profileBut:
+            case R.id.profileBut: {
                 Intent intent = new Intent(this, PlayerProfile.class);
                 intent.putExtra("userName",userName);
                 startActivity(intent);
-
+                break;
+            }
+            case R.id.collectionBut: {
+                Intent intent = new Intent(this, QRGameListActivity.class);
+                intent.putExtra("userName", userName);
+                startActivity(intent);
+                break;
+            }
         }
-        return  super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 }
