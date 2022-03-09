@@ -43,18 +43,24 @@ public class QRGameListActivity extends AppCompatActivity {
         QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
         qrStorage.getCol().whereEqualTo("username", username)
                 .orderBy("points", Query.Direction.DESCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
-                            FirebaseFirestoreException error) {
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
                         qrDataList.clear();
                         if(queryDocumentSnapshots != null) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                qrDataList.add(new QRGame(document));
+                                boolean isExist = false;
+                                String hex = (String) document.get("hexString");
+                                for(QRGame game : qrDataList) {
+                                    if(game.getHexString().equals(hex)) {
+                                        isExist = true;
+                                        break;
+                                    }
+                                }
+                                if(!isExist) {
+                                    qrDataList.add(new QRGame(document));
+                                }
                             }
                             qrAdapter.notifyDataSetChanged();
                         }
-                    }
                 });
     }
 }
