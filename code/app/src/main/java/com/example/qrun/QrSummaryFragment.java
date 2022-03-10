@@ -14,23 +14,22 @@ import com.example.qrun.databinding.QrSummaryFragmentBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class QrSummaryFragment extends Fragment {
 
     private QrSummaryFragmentBinding binding;
 
-    FirebaseFirestore QrRun;
-    Storage QrStore;
-    ArrayAdapter<String> sharedQrAdapter;
-    ArrayAdapter<String> commentAdapter;
+    private FirebaseFirestore QrRun;
+    private Storage QrStore;
+    private ArrayAdapter<String> sharedQrAdapter;
+    private ArrayAdapter<String> commentAdapter;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         QrStore = new Storage(QrRun, "QR");
 
         binding = QrSummaryFragmentBinding.inflate(inflater, container, false);

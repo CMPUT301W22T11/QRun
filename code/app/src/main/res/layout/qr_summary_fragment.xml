@@ -1,54 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".QrSummaryFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
 
-    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/points"
-        android:text="points"
-        android:layout_margin="5dp">
-    </TextView>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".QrSummaryFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Location"
-        android:layout_margin="5dp"
-        android:text="Location">
-    </TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/points"
+            android:text="points"
+            android:layout_margin="5dp">
+        </TextView>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Also owned by:"
-        android:layout_margin="5dp"
-        android:id="@+id/shared_qrs">
-    </TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/Location"
+            android:layout_margin="5dp"
+            android:text="Location">
+        </TextView>
 
-    <ListView
-        android:id="@+id/shared_qr_list"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"></ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Also owned by:"
+            android:layout_margin="5dp"
+            android:id="@+id/shared_qrs">
+        </TextView>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/comments"
-        android:layout_margin="5dp"
-        android:text="Comments:">
-    </TextView>
+        <ListView
+            android:id="@+id/shared_qr_list"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"></ListView>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/comment_list">
-    </ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comments"
+            android:layout_margin="5dp"
+            android:text="Comments:">
+        </TextView>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/comment_list">
+        </ListView>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>
