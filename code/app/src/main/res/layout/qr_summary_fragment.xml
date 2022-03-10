@@ -1,57 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".QrSummaryFragment">
+        android:layout_height="match_parent">
+        <LinearLayout
 
-        <TextView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".QrSummaryFragment">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/points"
+                android:text="points"
+                android:layout_margin="5dp">
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Location"
+                android:layout_margin="5dp"
+                android:text="Location">
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Also owned by:"
+                android:layout_margin="5dp"
+                android:id="@+id/shared_qrs">
+            </TextView>
+
+            <ListView
+                android:id="@+id/shared_qr_list"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"></ListView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comments"
+                android:layout_margin="5dp"
+                android:text="Comments:">
+            </TextView>
+
+            <ListView
+                android:id="@+id/comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_comment"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/points"
-            android:text="points"
-            android:layout_margin="5dp">
-        </TextView>
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
-        <TextView
-            android:layout_width="match_parent"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_qr"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Location"
-            android:layout_margin="5dp"
-            android:text="Location">
-        </TextView>
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:srcCompat="@android:drawable/ic_menu_delete"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Also owned by:"
-            android:layout_margin="5dp"
-            android:id="@+id/shared_qrs">
-        </TextView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <ListView
-            android:id="@+id/shared_qr_list"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"></ListView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/comments"
-            android:layout_margin="5dp"
-            android:text="Comments:">
-        </TextView>
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/comment_list">
-        </ListView>
-
-
-    </LinearLayout>
 </layout>

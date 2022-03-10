@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.qrun.databinding.QrSummaryFragmentBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -38,11 +39,28 @@ public class QrSummaryFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            ArrayList list = new ArrayList<String>();
-            sharedQrAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, list);
-            commentAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, list);
+            ArrayList sharedQrList = new ArrayList<String>();
+            ArrayList commentList = new ArrayList<String>();
+
+            sharedQrAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, sharedQrList);
+            commentAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, commentList);
+
             binding.sharedQrList.setAdapter(sharedQrAdapter);
             binding.commentList.setAdapter(commentAdapter);
+
+           binding.addComment.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   // add comment fragment/activity
+               }
+           });
+
+           binding.deleteQr.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   //add delete stuff here
+               }
+           });
 
     }
 
