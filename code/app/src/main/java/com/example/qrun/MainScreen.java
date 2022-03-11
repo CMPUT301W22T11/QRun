@@ -69,10 +69,10 @@ public class MainScreen extends AppCompatActivity {
                 Intent intent = new Intent(this, PlayerProfile.class);
                 intent.putExtra("userName",userName);
                 startActivity(intent);
-            case R.id.adminBut:
-                Intent intent1 = new Intent(this, PlayerProfile.class);
-                intent1.putExtra("userName",userName);
-                startActivity(intent1);
+//             case R.id.adminBut:
+//                 Intent intent1 = new Intent(this, PlayerProfile.class);
+//                 intent1.putExtra("userName",userName);
+//                 startActivity(intent1);
 
 
 
