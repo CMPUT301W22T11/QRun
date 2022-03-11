@@ -45,11 +45,10 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
     ArrayList<Comment> commentContentList;
     String QRid;
     FirebaseFirestore db;
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
-    String uid = user.getUid();//use user email as reference for now
-    Map<String, Object> comments = new HashMap<>();
-    final DocumentReference QrRef = db.collection("User").document("name").collection("QrWallet").document(QRid);
+    //    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//    FirebaseUser user = mAuth.getCurrentUser();
+    String uid ;//use user email as reference for now
+
 
 
     Comment tempComment;
@@ -57,12 +56,14 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_content);
+        setContentView(R.layout.activity_main);
         commentList = findViewById(R.id.comment_list);
         commentContentList = new ArrayList<>();
         commentAdapter = new CustomComment(this, commentContentList);
+        commentList.setAdapter(commentAdapter);
         db = FirebaseFirestore.getInstance();
-        final CollectionReference qrContentReference = db.collection("User").document("name").collection("QrWallet");
+        DocumentReference QrRef = db.collection("User").document(uid).collection("QrWallet").document(QRid);
+        Map<String, ArrayList<String>> comments = new HashMap<>();
         final FloatingActionButton addCommentButton = findViewById(R.id.add_comment_button);
 
         addCommentButton.setOnClickListener(new View.OnClickListener() {
@@ -76,39 +77,43 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
 
             }
         });
-
         QrRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {//query Firestore and update local view
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                 @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w("Fail", "Listen failed.", e);
-                    return;
-                }
 
-                if (snapshot != null && snapshot.exists()) {
-                    Comment comment = (Comment) snapshot.getData().get("comment");
+                commentContentList.clear();
+                ArrayList<String> commentText = new ArrayList<>();
+                commentText = (ArrayList<String>) snapshot.getData().get("comments");
+                for(int i=0;i<commentText.size();i++){
+                    Comment comment = new Comment(QRid, uid,commentText.get(i));
                     commentContentList.add(comment);
-                    commentAdapter.notifyDataSetChanged();
+                    Log.d("comments", commentText.get(i));
                 }
+                commentAdapter.notifyDataSetChanged();
             }
         });
 
-       commentList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//set up long click to delete selected comment
+
+        commentList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {//set up long click to delete selected comment
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int item, long l) {
                 new AlertDialog.Builder(QrContentActivity.this)
                         .setMessage("Do you want to delete the String?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
-                                if (uid != commentContentList.get(i).getUid()) {//check the whether user is trying to delete others' comment
+                                if (uid != commentContentList.get(item).getUid()) {//check the whether user is trying to delete others' comment
                                     Toast.makeText(getApplicationContext(), "You can't delete other's comment", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    tempComment = commentContentList.get(i);
-                                    comments.put("comments", FieldValue.delete());
+                                    ArrayList<String> tempCommentList = new ArrayList<>();
+                                    commentContentList.remove(item);
+                                    for(int j=0;j<commentContentList.size();j++){
+                                        tempCommentList.add(commentContentList.get(j).getComment());
+                                    }
+                                    comments.put("comments", tempCommentList);
                                     QrRef
-                                            .update(comments)
+                                            .set(comments)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
@@ -151,8 +156,14 @@ public class QrContentActivity extends AppCompatActivity implements AddCommentFr
 
     @Override
     public void onOkPressed(Comment newComment) {
-        tempComment = newComment;
-        comments.put("comment",tempComment.getComment());
+        ArrayList<String> tempCommentList = new ArrayList<>();
+        commentContentList.add(newComment);
+        for(int i=0;i<commentContentList.size();i++){
+            tempCommentList.add(commentContentList.get(i).getComment());
+        }
+        Map<String, ArrayList<String>> comments = new HashMap<>();
+        comments.put("comments",tempCommentList);
+        DocumentReference QrRef = db.collection("User").document(uid).collection("QrWallet").document(QRid);
         QrRef
                 .set(comments)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
