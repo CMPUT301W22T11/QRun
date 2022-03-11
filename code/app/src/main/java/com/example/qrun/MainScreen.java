@@ -21,11 +21,13 @@ public class MainScreen extends AppCompatActivity {
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
+    Boolean isAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
         Bundle extras = getIntent().getExtras();
+        isAdmin = true;//put the admin checking condition here
         if(extras != null){
             userName = extras.getString("userName");
             Log.d("xx",userName);
@@ -53,6 +55,11 @@ public class MainScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+        if(isAdmin == false){
+             MenuItem adminButton = menu.findItem(R.id.adminBut);
+             adminButton.setVisible(false);
+        }
+
         return true;
     }
     @Override
@@ -62,6 +69,12 @@ public class MainScreen extends AppCompatActivity {
                 Intent intent = new Intent(this, PlayerProfile.class);
                 intent.putExtra("userName",userName);
                 startActivity(intent);
+            case R.id.adminBut:
+                Intent intent1 = new Intent(this, PlayerProfile.class);
+                intent1.putExtra("userName",userName);
+                startActivity(intent1);
+
+
 
         }
         return  super.onOptionsItemSelected(item);

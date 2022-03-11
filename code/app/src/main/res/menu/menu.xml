@@ -22,5 +22,10 @@
 
         android:title="Profile"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/adminBut"
+
+        android:title="Admin"
+        app:showAsAction="never" />
 
 </menu>
