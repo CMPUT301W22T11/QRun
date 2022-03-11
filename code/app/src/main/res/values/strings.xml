@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QRun</string>
+    <string name="add_a_new_comment">Add a new comment</string>
+    <string name="points">points</string>
+    <string name="location">Location</string>
+    <string name="also_owned_by">Also owned by:</string>
+    <string name="comments">Comments:</string>
+    <string name="delete_current_qr_code">Delete current Qr code</string>
 </resources>

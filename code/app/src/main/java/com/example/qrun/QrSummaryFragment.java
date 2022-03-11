@@ -22,7 +22,7 @@ public class QrSummaryFragment extends Fragment {
     private QrSummaryFragmentBinding binding;
 
     private FirebaseFirestore QrRun;
-    private Storage QrStore;
+    private QRStorage QrStore;
     private ArrayAdapter<String> sharedQrAdapter;
     private ArrayAdapter<String> commentAdapter;
 
@@ -31,7 +31,7 @@ public class QrSummaryFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        QrStore = new Storage(QrRun, "QR");
+        QrStore = new QRStorage(QrRun);
 
         binding = QrSummaryFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();

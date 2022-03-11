@@ -29,12 +29,6 @@ public class QrSummary extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.addComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //add comment fragment here
-            }
-        });
     }
 
     @Override

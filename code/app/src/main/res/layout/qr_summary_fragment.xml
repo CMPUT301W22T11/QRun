@@ -17,7 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/points"
-                android:text="points"
+                android:text="@string/points"
                 android:layout_margin="5dp">
             </TextView>
 
@@ -26,13 +26,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/Location"
                 android:layout_margin="5dp"
-                android:text="Location">
+                android:text="@string/location">
             </TextView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Also owned by:"
+                android:text="@string/also_owned_by"
                 android:layout_margin="5dp"
                 android:id="@+id/shared_qrs">
             </TextView>
@@ -40,14 +40,15 @@
             <ListView
                 android:id="@+id/shared_qr_list"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"></ListView>
+                android:layout_height="250dp">
+            </ListView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comments"
                 android:layout_margin="5dp"
-                android:text="Comments:">
+                android:text="@string/comments">
             </TextView>
 
             <ListView
@@ -63,7 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:contentDescription="@string/add_a_new_comment" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_qr"
@@ -72,7 +74,8 @@
             android:layout_gravity="bottom|start"
             android:layout_margin="16dp"
             android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_menu_delete"/>
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            android:contentDescription="@string/delete_current_qr_code" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
