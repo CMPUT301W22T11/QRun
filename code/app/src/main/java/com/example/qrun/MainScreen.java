@@ -70,7 +70,7 @@ public class MainScreen extends AppCompatActivity {
                 intent.putExtra("userName",userName);
                 startActivity(intent);
             case R.id.adminBut:
-                Intent intent1 = new Intent(this, PlayerProfile.class);
+                Intent intent1 = new Intent(this, AdminActivity.class);
                 intent1.putExtra("userName",userName);
                 startActivity(intent1);
 

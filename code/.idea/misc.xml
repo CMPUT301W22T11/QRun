@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/activity_admin.xml" value="0.3740942028985507" />
+        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/activity_main_screen.xml" value="0.4904891304347826" />
+        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/admin_search_player_activity.xml" value="0.3740942028985507" />
+        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/menu/menu.xml" value="0.5322916666666667" />
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_login.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_main_screen.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_player_profile.xml" value="0.5" />
