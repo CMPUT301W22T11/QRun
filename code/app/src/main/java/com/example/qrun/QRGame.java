@@ -39,7 +39,6 @@ public class QRGame extends QR implements Serializable {
      * The constructor uses this text to calculate the points of the QRGame
      * @param id the Queried Document from Firestore
      */
-    public
     public QRGame(QueryDocumentSnapshot id) {
         super("", null);
         Map<String, Object> l = id.getData();
