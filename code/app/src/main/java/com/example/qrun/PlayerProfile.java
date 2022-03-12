@@ -2,9 +2,11 @@ package com.example.qrun;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,6 +24,7 @@ public class PlayerProfile extends AppCompatActivity {
     TextView emailTV;
     TextView telTV;
     TextView streetAddressTV;
+    ImageView qrCodeImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +37,10 @@ public class PlayerProfile extends AppCompatActivity {
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
+        QRGenerator qrCodeGen = new QRGenerator();
+        Bitmap qrGen= qrCodeGen.generateQRBitmap(userName,this);
+        qrCodeImage=(ImageView) findViewById(R.id.qrCodeIV);
+        qrCodeImage.setImageBitmap(qrGen);
         userStorage.get(userName, (data)->{
             if(data!=null){
                 name = (String) data.get("name");
