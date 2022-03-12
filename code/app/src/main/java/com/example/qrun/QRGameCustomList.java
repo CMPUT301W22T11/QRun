@@ -19,6 +19,11 @@ public class QRGameCustomList extends ArrayAdapter<QRGame> {
     private ArrayList<QRGame> QRGameList;
     private Context context;
 
+    /**
+     *
+     * @param context
+     * @param lists
+     */
     public QRGameCustomList(Context context, ArrayList<QRGame> lists){
         super(context,0, lists);
         this.QRGameList = lists;

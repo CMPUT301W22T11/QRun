@@ -68,7 +68,7 @@ public class UserProfileExternal extends AppCompatActivity {
         }
         );
     }
-    public void initTV (){
+    private void initTV (){
         usernameTV = findViewById(R.id.userNameTV);
         uniqueQRRankTV = findViewById(R.id.QRCodeRank) ;
         totalNumQRTV = findViewById(R.id.numQRCode) ;

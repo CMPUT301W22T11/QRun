@@ -31,42 +31,37 @@ public class PlayerProfile extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             userName = extras.getString("userName");
-//            Log.d("xx",userName);
         }
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
-
-
         userStorage.get(userName, (data)->{
-                    if(data!=null){
-                        name = (String) data.get("name");
-                        Log.d("ffwfwf",name);
-                        email = (String) data.get("email");
-                        phone = (String) data.get("phone");
-                        usernameTV.setText(userName);
-                        nameTV.setText(name);
-                        emailTV.setText(email);
-                        telTV.setText(phone);
-                        long totalPoints = 0;
-                        long totalScanned = 0;
-                        Object temp = data.get("totalpoints");
-                        if(temp != null) {
-                            totalPoints = (long)temp;
-                        }
-                        temp = data.get("totalscannedqr");
-                        if(temp != null) {
-                            totalScanned = (long)temp;
-                        }
-                        totalNumQRTV.setText("Total # of QR codes Ranking: "+String.valueOf(totalScanned));
-                        totalSumQRTV.setText("Total Sum of QR codes Ranking: "+String.valueOf(totalPoints));
-                    }
+            if(data!=null){
+                name = (String) data.get("name");
+                Log.d("ffwfwf",name);
+                email = (String) data.get("email");
+                phone = (String) data.get("phone");
+                usernameTV.setText(userName);
+                nameTV.setText(name);
+                emailTV.setText(email);
+                telTV.setText(phone);
+                long totalPoints = 0;
+                long totalScanned = 0;
+                Object temp = data.get("totalpoints");
+                if(temp != null) {
+                    totalPoints = (long)temp;
                 }
-
+                temp = data.get("totalscannedqr");
+                if(temp != null) {
+                    totalScanned = (long)temp;
+                }
+                totalNumQRTV.setText("Total # of QR codes Ranking: "+String.valueOf(totalScanned));
+                totalSumQRTV.setText("Total Sum of QR codes Ranking: "+String.valueOf(totalPoints));
+            }
+        }
         );
     }
     public void initTV (){
         usernameTV = findViewById(R.id.userNameTV);
-
         uniqueQRRankTV = findViewById(R.id.QRCodeRank) ;
         totalNumQRTV = findViewById(R.id.numQRCode) ;
         totalSumQRTV = findViewById(R.id.totalSumQR) ;
