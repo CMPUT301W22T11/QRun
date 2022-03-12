@@ -1,5 +1,9 @@
 package com.example.qrun;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -20,6 +24,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Map;
 
 public class MainScreen extends AppCompatActivity {
+    private ActivityResultLauncher<Intent> ac = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    // if result is 1, then update the list
+                    if(result.getResultCode() == 1) {
+                        Log.d("add QR()", "ADD QR Successfully");
+                    }
+                    else {
+                        Log.d("add QR()", "Failed to Add QR");
+                    }
+                }
+            }
+    );
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
@@ -30,6 +49,7 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
         qrCodeImage =  (ImageView) findViewById(R.id.qrCodeImage);
         Bundle extras = getIntent().getExtras();
+        cameraBut = findViewById(R.id.cameraButton);
         if(extras != null){
             userName = extras.getString("userName");
             Log.d("xx",userName);
@@ -53,7 +73,17 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void cameraButton(View view){
-
+        userStorage.get(userName, (data)->{
+            if(data!=null){
+                String x = (String) data.get("email");
+                Log.d("xx",x);
+            }
+        });
+        cameraBut.setOnClickListener((l) -> {
+            Intent intent = new Intent(this, AddGameQR.class);
+            intent.putExtra("userName", userName);
+            ac.launch(intent);
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,12 +94,19 @@ public class MainScreen extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.profileBut:
+            case R.id.profileBut: {
                 Intent intent = new Intent(this, PlayerProfile.class);
                 intent.putExtra("userName",userName);
                 startActivity(intent);
-
+                break;
+            }
+            case R.id.collectionBut: {
+                Intent intent = new Intent(this, QRGameListActivity.class);
+                intent.putExtra("userName", userName);
+                startActivity(intent);
+                break;
+            }
         }
-        return  super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 }

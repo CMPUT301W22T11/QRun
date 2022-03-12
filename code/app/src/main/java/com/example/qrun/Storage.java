@@ -35,7 +35,7 @@ public class Storage {
     public CollectionReference getCol() {
         return collectionReference;
     }
-    public void add(String docName, HashMap<?, ?> value, @NonNull StoreOnComplete comp) {
+    public void add(String docName, Map<?, ?> value, @NonNull StoreOnComplete comp) {
         collectionReference
             .document(docName)
             .set(value)
@@ -56,7 +56,7 @@ public class Storage {
                 }
             });
     }
-    public void update(String docName, @NonNull HashMap<String, Object> data, @NonNull StoreOnComplete comp) {
+    public void update(String docName, @NonNull Map<String, Object> data, @NonNull StoreOnComplete comp) {
         collectionReference.document(docName).update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
