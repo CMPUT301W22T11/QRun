@@ -73,12 +73,6 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public void cameraButton(View view){
-        userStorage.get(userName, (data)->{
-            if(data!=null){
-                String x = (String) data.get("email");
-                Log.d("xx",x);
-            }
-        });
         cameraBut.setOnClickListener((l) -> {
             Intent intent = new Intent(this, AddGameQR.class);
             intent.putExtra("userName", userName);
