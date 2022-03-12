@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
         UserStorage store = new UserStorage(db);
         store.get(username, (check) -> {
             if(check != null) {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("usrName", username);
-                editor.commit();
                 onOkPressed(username);
             }
         });
@@ -85,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
     public void onOkPressed(String name) {
         if(name != null) {
             Log.d("Signup", "User Signed up: " + name);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("usrName", name);
+            editor.commit();
             Toast.makeText(MainActivity.this, "Login/Signup Successfully!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainScreen.class);
             intent.putExtra("userName",name);
