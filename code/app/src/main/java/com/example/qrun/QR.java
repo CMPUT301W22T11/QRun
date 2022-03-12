@@ -28,10 +28,6 @@ public class QR implements Serializable {
         this.hexString = QRCalculation.toHexString(this.bytes);
         this.username = username;
     }
-    QR(String documentName) {
-
-    }
-
     public void setHexString(String hexString) {
         this.hexString = hexString;
     }
