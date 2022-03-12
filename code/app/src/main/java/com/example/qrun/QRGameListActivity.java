@@ -31,7 +31,8 @@ public class QRGameListActivity extends AppCompatActivity {
     String username;
     Button isUpButton;
     boolean isUp = false;
-    private void getData(QuerySnapshot queryDocumentSnapshots) {
+    public static void getData(QuerySnapshot queryDocumentSnapshots, ArrayList<QRGame> qrDataList,
+                                ArrayAdapter<QRGame> qrAdapter) {
         qrDataList.clear();
         if(queryDocumentSnapshots != null) {
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
@@ -73,9 +74,7 @@ public class QRGameListActivity extends AppCompatActivity {
                 qrStorage.getCol().whereEqualTo("username", username)
                         .orderBy("points", Query.Direction.ASCENDING)
                         .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                            if(isUp == false) {
-                                getData(queryDocumentSnapshots);
-                            }
+                            getData(queryDocumentSnapshots, qrDataList, qrAdapter);
                         });
             }
             else {
@@ -84,9 +83,7 @@ public class QRGameListActivity extends AppCompatActivity {
                 qrStorage.getCol().whereEqualTo("username", username)
                         .orderBy("points", Query.Direction.DESCENDING)
                         .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                            if(isUp == true) {
-                                getData(queryDocumentSnapshots);
-                            }
+                            getData(queryDocumentSnapshots, qrDataList, qrAdapter);
                         });
             }
         });
@@ -94,9 +91,7 @@ public class QRGameListActivity extends AppCompatActivity {
         qrStorage.getCol().whereEqualTo("username", username)
                 .orderBy("points", Query.Direction.DESCENDING)
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    if(isUp == false) {
-                        getData(queryDocumentSnapshots);
-                    }
+                    getData(queryDocumentSnapshots, qrDataList, qrAdapter);
                 });
     }
 }

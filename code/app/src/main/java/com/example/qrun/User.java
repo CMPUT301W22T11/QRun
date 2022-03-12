@@ -2,11 +2,14 @@ package com.example.qrun;
 
 import android.location.Location;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 
 public class User {
-    private ArrayList<QR> qrStore = new ArrayList<QR>() ;
-    private QR qrGameStatus;
+    private ArrayList<QRGame> qrStore = new ArrayList<>() ;
+    private QRGame qrGameStatus;
     private Location location;
     private String username;
 
@@ -14,13 +17,19 @@ public class User {
         this.location = location;
         this.username = username;
     }
-    public void addQR(QR qr){
+    public User(QueryDocumentSnapshot document){
+        this.username = document.getId();
+    }
+    public User(DocumentSnapshot document){
+        this.username = document.getId();
+    }
+    public void addQR(QRGame qr){
         qrStore.add(qr);
     }
-    public ArrayList<QR> getStoredQr(){
+    public ArrayList<QRGame> getStoredQr(){
         return qrStore;
     }
-    public void removeQR(QR qr){
+    public void removeQR(QRGame qr){
         qrStore.remove(qr);
     }
     public int getTotalQR(){
@@ -29,10 +38,10 @@ public class User {
     public User getUser(){
         return this;
     }
-    public void setQrGameStatus(QR qr){
+    public void setQrGameStatus(QRGame qr){
         qrGameStatus = qr;
     }
-    public QR getQRGameStatus(){
+    public QRGame getQRGameStatus(){
         return qrGameStatus;
     }
 

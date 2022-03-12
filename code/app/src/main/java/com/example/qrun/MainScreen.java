@@ -74,6 +74,13 @@ public class MainScreen extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
+            case R.id.socialBut: {
+                Intent intent = new Intent(this, UserListingActivity.class);
+                intent.putExtra("userName",userName);
+                startActivity(intent);
+                break;
+            }
+
             case R.id.profileBut: {
                 Intent intent = new Intent(this, PlayerProfile.class);
                 intent.putExtra("userName",userName);
