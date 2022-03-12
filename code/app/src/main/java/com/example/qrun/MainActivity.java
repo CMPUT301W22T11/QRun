@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -61,9 +62,14 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
     public void onOkPressed(String name) {
         if(name != null) {
             Log.d("Signup", "User Signed up: " + name);
+            Toast.makeText(MainActivity.this, "Login/Signup Successfully!", Toast.LENGTH_SHORT);
             Intent intent = new Intent(this, MainScreen.class);
             intent.putExtra("userName",name);
             startActivity(intent);
         }
+        else {
+            Toast.makeText(MainActivity.this, "Unable to identify user", Toast.LENGTH_SHORT);
+        }
+
     }
 }
