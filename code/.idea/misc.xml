@@ -3,24 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/activity_qr_content.xml" value="0.25" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/add_comment_fragment.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/comment_list_content_view.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/content_qr_content.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/fragment_first.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/fragment_second.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT 301/QRun/code/app/src/main/res/layout/player_list_content.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/activity_main.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/activity_qr_content.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/activity_social.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/add_comment_fragment.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/comment_list_content_view.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/comment_view_fragment.xml" value="0.5322916666666667" />
-        <entry key="..\:/2022Winter/CMPUT301/QRun/code/app/src/main/res/layout/user_qr_fragment.xml" value="0.5322916666666667" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/activity_main_screen.xml" value="0.4" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/activity_player_profile.xml" value="0.264" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/activity_player_profile_external.xml" value="0.4" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/activity_qrgame_list.xml" value="0.264" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/activity_user_listing.xml" value="0.264" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/layout/fragment_camera.xml" value="0.8" />
+        <entry key="..\:/FourthYear/CMPUT_301/project/QRun/code/app/src/main/res/menu/menu.xml" value="0.264" />
+        <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_login.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_main_screen.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_player_profile.xml" value="0.75" />
+        <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/menu/menu.xml" value="0.25" />
+        <entry key="..\:/Users/tahia/AndroidStudioProjects/CMPUT 301 - new branch/QRun/code/app/src/main/res/layout/activity_maps.xml" value="0.1" />
+        <entry key="..\:/Users/tahia/AndroidStudioProjects/CMPUT 301 - new branch/QRun/code/app/src/main/res/layout/image_popup.xml" value="0.1" />
+        <entry key="..\:/Users/tahia/AndroidStudioProjects/CMPUT 301 - new branch/QRun/code/app/src/main/res/layout/map_point_popup.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

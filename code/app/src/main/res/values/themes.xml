@@ -20,6 +20,5 @@
     </style>
 
     <style name="Theme.QRun.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="Theme.QRun.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
