@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.qrun">
+
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRun">
         <activity
+            android:name=".UserListingActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayerProfile"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileExternal"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -21,10 +29,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScanningActivity"
-            android:exported="false"/>
-        <activity android:name=".QRGameListActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".ScanningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QRGameListActivity"
+            android:exported="false" />
         <activity
             android:name=".MainScreen"
             android:exported="false" />
