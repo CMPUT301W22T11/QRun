@@ -69,7 +69,6 @@ public class MainScreen extends AppCompatActivity {
 
                 );
 
-
     }
 
     public void cameraButton(View view){
