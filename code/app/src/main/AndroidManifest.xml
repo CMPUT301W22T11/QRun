@@ -41,6 +41,9 @@
         <activity
             android:name=".AddGameQR"
             android:exported="false" />
+        <activity
+            android:name=".QrSummary"
+            android:exported="false" />
     </application>
 
 </manifest>
