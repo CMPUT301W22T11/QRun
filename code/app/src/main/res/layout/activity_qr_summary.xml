@@ -7,21 +7,76 @@
         android:layout_height="match_parent"
         tools:context=".QrSummary">
 
-        <com.google.android.material.appbar.AppBarLayout
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.QRun.AppBarOverlay">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/Theme.QRun.PopupOverlay" />
+                android:layout_height="wrap_content"
+                android:id="@+id/points"
+                android:text="Points"
+                android:layout_margin="5dp">
+            </TextView>
 
-        </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Location"
+                android:layout_margin="5dp"
+                android:text="Location">
+            </TextView>
 
-        <include layout="@layout/content_qr_summary" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Also owned by:"
+                android:layout_margin="5dp"
+                android:id="@+id/shared_qrs">
+            </TextView>
+
+            <ListView
+                android:id="@+id/shared_qr_list"
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+            </ListView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comments"
+                android:layout_margin="5dp"
+                android:text="Comments:">
+            </TextView>
+
+            <ListView
+                android:id="@+id/comment_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </ListView>
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            app:srcCompat="@android:drawable/ic_input_add"
+            android:contentDescription="Add a new comment" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:srcCompat="@android:drawable/ic_menu_delete"
+            android:contentDescription="Delete current qr code" />
 
 
 
