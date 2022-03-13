@@ -1,7 +1,9 @@
 package com.example.qrun;
 
-public class Owner extends UserOld {
-    public Owner(int location, String username) {
+import android.location.Location;
+
+public class Owner extends User {
+    public Owner(Location location, String username) {
         super(location, username);
     }
 

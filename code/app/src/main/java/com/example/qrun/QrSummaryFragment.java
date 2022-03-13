@@ -2,6 +2,7 @@ package com.example.qrun;
 
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.qrun.databinding.QrSummaryFragmentBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -39,10 +44,30 @@ public class QrSummaryFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            ArrayList sharedQrList = new ArrayList<String>();
+        String hexString = "";
+        ArrayList<String> sharedUsers = new ArrayList<String>();
+        QrRun.collection("QR").whereEqualTo("hexString", hexString ).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(DocumentSnapshot document : task.getResult()){
+                                if(document.exists()){
+                                    String user = (String) document.getData().get("username");
+                                    sharedUsers.add(user);
+                                } else {
+                                    Log.d("Storage get()", "No such document");
+                                }
+                                }
+                        }else {
+                            Log.d("Storage get()", "get failed with", task.getException());
+                        }
+                    }
+                });
+
             ArrayList commentList = new ArrayList<String>();
 
-            sharedQrAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, sharedQrList);
+            sharedQrAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, sharedUsers);
             commentAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_layout, commentList);
 
             binding.sharedQrList.setAdapter(sharedQrAdapter);
