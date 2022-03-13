@@ -1,3 +1,4 @@
+
 package com.example.qrun;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,18 +28,18 @@ public class CustomComment extends ArrayAdapter<Comment> {
         View view = convertView;
 
         if (view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.comment_list_contentview,parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.comment_list_content_view,parent,false);
         }
 
         Comment comment = comments.get(position);
 
 
-        String temp;
-        temp=comment.getComment();
-        while(temp.length()>253){
-            temp=temp.substring(0,temp.length()-1);
-        }
-        temp=temp+"...";
+            String temp;
+            temp=comment.getComment();
+            while(temp.length()>253){
+                temp=temp.substring(0,temp.length()-1);
+            }
+            temp=temp+"...";
 
 
         TextView userId = view.findViewById(R.id.uid_text);

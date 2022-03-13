@@ -15,6 +15,9 @@
             android:name=".UserListingActivity"
             android:exported="false" />
         <activity
+            android:name=".QrContentActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayerProfile"
             android:exported="false" />
         <activity
