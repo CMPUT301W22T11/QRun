@@ -15,6 +15,11 @@ public class QRCalculation {
         return md.digest(input.getBytes());
     }
 
+    /**
+     * Convert Byte to hex String
+     * @param hash the raw hash data
+     * @return the String modified hash
+     */
     public static String toHexString(byte[] hash)
     {
         StringBuilder result = new StringBuilder();

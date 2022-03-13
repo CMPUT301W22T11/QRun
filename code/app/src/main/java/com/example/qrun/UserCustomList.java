@@ -10,23 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class QRGameCustomList extends ArrayAdapter<QRGame> {
+public class UserCustomList extends ArrayAdapter<User> {
 
-    private ArrayList<QRGame> QRGameList;
+    private ArrayList<User> UserGameList;
     private Context context;
 
-    /**
-     *
-     * @param context
-     * @param lists
-     */
-    public QRGameCustomList(Context context, ArrayList<QRGame> lists){
+    public UserCustomList(Context context, ArrayList<User> lists){
         super(context,0, lists);
-        this.QRGameList = lists;
+        this.UserGameList = lists;
         this.context = context;
     }
     @NonNull
@@ -38,13 +31,13 @@ public class QRGameCustomList extends ArrayAdapter<QRGame> {
             view = LayoutInflater.from(context).inflate(R.layout.qr_list_content, parent,false);
         }
 
-        QRGame qrGame = QRGameList.get(position);
+        User user = UserGameList.get(position);
 
         TextView qrHash = view.findViewById(R.id.qrhash);
         TextView qrPoints = view.findViewById(R.id.qrpoint);
 
-        qrHash.setText(qrGame.getHexString());
-        qrPoints.setText(String.valueOf(qrGame.getPoints()));
+        qrHash.setText(user.getUsername());
+        qrPoints.setText("");
         return view;
 
     }

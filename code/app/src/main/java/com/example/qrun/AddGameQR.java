@@ -83,60 +83,60 @@ public class AddGameQR extends AppCompatActivity {
                 data.put("latitude", qr.getLat());
                 data.put("longitude", qr.getLon());
                 data.put("PicPath", qr.getPath());
-                // add data regardless
-                storage.add(data, (isSuccess) -> {
-                    if(isSuccess) {
-                        storage.getCol().whereEqualTo("hexString", qr.getHexString())
-                                .whereEqualTo("username", username)
-                                .get()
-                                .addOnCompleteListener((task) ->
-                                {
-                                    if(task.isSuccessful()) {
-
-                                        if(task.getResult().size() == 0) {
-                                            points = qr.getPoints();
-                                        }
-                                        user.get(username, (userData) -> {
-                                            if(userData != null) {
-                                                long totalPoints, totalScanned;
-                                                Object temp = userData.get("totalpoints");
-                                                if (temp == null) {
-                                                    totalPoints = points;
-                                                } else {
-                                                    totalPoints = (long) temp;
-                                                    totalPoints += points;
-                                                }
-                                                temp = userData.get("totalscannedqr");
-                                                if (temp == null) {
-                                                    totalScanned = 1;
-                                                } else {
-                                                    totalScanned = (long) temp;
-                                                    totalScanned++;
-                                                }
-                                                userData.put("totalscannedqr", totalScanned);
-                                                userData.put("totalpoints", totalPoints);
-                                                user.update(username, userData, (isUserSuccess) -> {
-                                                    if (isUserSuccess) {
-                                                        Intent intent = new Intent();
-                                                        setResult(1, intent);
-                                                        finish();
+                // check for data already exists
+                storage.getCol().whereEqualTo("username", username)
+                        .whereEqualTo("hexString", qr.getHexString())
+                        .get()
+                        .addOnCompleteListener((task) -> {
+                            if(task.isSuccessful()) {
+                                QuerySnapshot document = task.getResult();
+                                if(document.size() == 0) {
+                                    storage.add(data, (isComplete) -> {
+                                        if(isComplete) {
+                                            user.get(username, (userData) -> {
+                                                if(userData != null) {
+                                                    long totalPoints, totalScanned;
+                                                    Object temp = userData.get("totalpoints");
+                                                    if (temp == null) {
+                                                        totalPoints = points;
                                                     } else {
-                                                        ErrorFinish();
+                                                        totalPoints = (long) temp;
+                                                        totalPoints += points;
                                                     }
-                                                });
-                                            }
-                                            else {
-                                                ErrorFinish();
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        ErrorFinish();
-                                    }
-                                });
-                    }
-                });
-            }
+                                                    temp = userData.get("totalscannedqr");
+                                                    if (temp == null) {
+                                                        totalScanned = 1;
+                                                    } else {
+                                                        totalScanned = (long) temp;
+                                                        totalScanned++;
+                                                    }
+                                                    userData.put("totalscannedqr", totalScanned);
+                                                    userData.put("totalpoints", totalPoints);
+                                                    user.update(username, userData, (isUserSuccess) -> {
+                                                        if (isUserSuccess) {
+                                                            Intent intent = new Intent();
+                                                            setResult(1, intent);
+                                                            finish();
+                                                        } else {
+                                                            ErrorFinish();
+                                                        }
+                                                    });
+                                                }
+                                                else {
+                                                    ErrorFinish();
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            ErrorFinish();
+                                        }
+                                    });
+                                }
+                                else {
+                                    ErrorFinish();
+                                }
+                            }
+                        });            }
             else {
                 ErrorFinish();
             }
