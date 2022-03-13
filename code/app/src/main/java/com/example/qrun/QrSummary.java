@@ -1,5 +1,6 @@
 package com.example.qrun;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +38,8 @@ CommentViewFragment.OnFragmentInteractionListener {
     private String username;
     private Comment tempComment;
     private CommentStorage commentStorage;
+    private QRGame tempQR = null;
+    private Context ctx = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ CommentViewFragment.OnFragmentInteractionListener {
             hexString = extras.getString("hexString");
             username = extras.getString("username");
         }
+        ctx = this;
         ArrayList<String> sharedUsers = new ArrayList<>();
         sharedQrAdapter = new ArrayAdapter<String>(this, R.layout.list_layout, sharedUsers);
         binding.sharedQrList.setAdapter(sharedQrAdapter);
@@ -106,7 +110,6 @@ CommentViewFragment.OnFragmentInteractionListener {
                 viewComment.show(getSupportFragmentManager(),"view_comment");
             }
         });
-//        TODO merge comment fragment
         binding.addComment.setOnClickListener(new View.OnClickListener() {//pop up dialog when float button pressed
             @Override
             public void onClick(View view) {
@@ -120,13 +123,26 @@ CommentViewFragment.OnFragmentInteractionListener {
 
             }
         });
+        QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
+        qrStorage.getCol().whereEqualTo("hexString", hexString)
+                .whereEqualTo("username", username)
+                .get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    if(queryDocumentSnapshots.size() > 0) {
+                        tempQR = new QRGame(queryDocumentSnapshots.getDocuments().get(0));
+                        binding.deleteQr.setVisibility(View.VISIBLE);
+                        binding.deleteQr.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                qrStorage.delete(tempQR, isSuccess -> {
+                                    Toast.makeText(ctx, "Delete Successfully!", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                });
+                            }
+                        });
+                    }
 
-//        binding.deleteQr.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //delete functionality
-//            }
-//        });
+                });
+
     }
     public void onOkPressed(Comment newComment) {
         commentContentList.add(newComment);                             //add new comment object into local data list

@@ -2,6 +2,7 @@ package com.example.qrun;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -39,7 +40,7 @@ public class QRGame extends QR implements Serializable {
      * The constructor uses this text to calculate the points of the QRGame
      * @param id the Queried Document from Firestore
      */
-    public QRGame(QueryDocumentSnapshot id) {
+    public QRGame(DocumentSnapshot id) {
         super("", null);
         Map<String, Object> l = id.getData();
         this.username = (String)l.get("username");
