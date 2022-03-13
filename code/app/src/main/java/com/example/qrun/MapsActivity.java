@@ -111,7 +111,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             );
 
             images.put(marker, qr.getPath());
-            Log.d("--------------------------------------------------------------------------------------------------------------", String.valueOf(qr.getPoints()));
 
         }
 

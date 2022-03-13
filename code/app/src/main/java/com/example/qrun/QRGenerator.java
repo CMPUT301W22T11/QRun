@@ -20,6 +20,13 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QRGenerator {
 
+
+    /**
+     * Static method for generating a QR code holding a string
+     * This is used to generate qr code for other users to scan
+     * @param Text String that the QRGame code represents
+     * @param context Context of the activity generating the QR code
+     */
     public static Bitmap generateQRBitmap(String Text, Context context){
 
         Bitmap QRBitmap;

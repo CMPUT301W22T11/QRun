@@ -25,6 +25,10 @@ public class QRGame extends QR implements Serializable {
      * Constructor for QRGame takes in the text that the QRGame represents
      * The constructor uses this text to calculate the points of the QRGame
      * @param Text String that the QRGame code represents
+     * @param username Name of user owning the qr
+     * @param lat latitude of the location of the qr
+     * @param lon longitude of the location of the qr
+     * @param path directive to retrieve picture resource of the location
      */
     public QRGame(String Text, String username, double lat, double lon, String path){
         super(Text, username);
@@ -76,6 +80,15 @@ public class QRGame extends QR implements Serializable {
     public void setPath(String path) {
         this.path = path;
     }
+
+    @Override
+    public void setHexString(String hexString) {
+
+        this.hexString = hexString;
+        //points need to be recalculated
+        this.setPoints(QRCalculation.calcScore(this.getHexString()));
+    }
+
 
     /**
      *
