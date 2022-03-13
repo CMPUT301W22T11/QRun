@@ -69,6 +69,15 @@ public class MainScreen extends AppCompatActivity {
 
                 );
 
+        mapsButton = findViewById(R.id.mapButton);
+
+        mapsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
