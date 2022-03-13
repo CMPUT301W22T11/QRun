@@ -20,10 +20,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AddCommentFragment extends DialogFragment {
-//    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//    FirebaseUser user = mAuth.getCurrentUser();
-    String uid;
-    String QHash;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = mAuth.getCurrentUser();
+    String uid = user.getUid();
+    String Qid;
     private EditText QrComment;
     private OnFragmentInteractionListener listener;
 
@@ -48,10 +48,6 @@ public class AddCommentFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_comment_fragment,null);
         QrComment =view.findViewById(R.id.comment_text);
-        Bundle bundle = getArguments(); // receiving current qHash and user from QR content activity
-        String[] info = bundle.getStringArray("uidQid");
-        uid = info[0];
-        QHash = info[1];
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -61,11 +57,13 @@ public class AddCommentFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String commentText = QrComment.getText().toString();
+                        Bundle currentQr = getArguments();
+                        Qid = currentQr.getString("currentQr");
                         if (commentText.length()==0){
                             Toast.makeText(getActivity(), "Please input valid words", Toast.LENGTH_LONG).show();
                             listener.onCancelPressed();
                         }else{
-                            Comment comment = new Comment(QHash, uid,commentText);
+                            Comment comment = new Comment(Qid, uid,commentText);
                             listener.onOkPressed(comment);
                         }
                     }}).create();
