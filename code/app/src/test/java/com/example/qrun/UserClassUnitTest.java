@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class UserClassUnitTest {
     Location TestLocation = new Location("TestLocation");
     User TestUser = new User(TestLocation, "TestUser");
-    QR TestQR=new QR("TestQR");
+    QRUser TestQR=new QRUser("TestQR");
     @BeforeEach
     public void settings() {
         TestUser.addQR(TestQR);
