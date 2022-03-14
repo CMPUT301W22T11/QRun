@@ -47,7 +47,6 @@ public class AddGameQR extends AppCompatActivity {
     private double lon = 0.0; //TODO: modify this when we have an actual map
     private String username;
     private Context ctx;
-    private long points = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +97,10 @@ public class AddGameQR extends AppCompatActivity {
                                                     long totalPoints, totalScanned;
                                                     Object temp = userData.get("totalpoints");
                                                     if (temp == null) {
-                                                        totalPoints = points;
+                                                        totalPoints = qr.getPoints();
                                                     } else {
                                                         totalPoints = (long) temp;
-                                                        totalPoints += points;
+                                                        totalPoints += qr.getPoints();
                                                     }
                                                     temp = userData.get("totalscannedqr");
                                                     if (temp == null) {

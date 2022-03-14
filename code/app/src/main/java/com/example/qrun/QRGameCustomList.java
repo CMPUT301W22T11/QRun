@@ -20,7 +20,7 @@ public class QRGameCustomList extends ArrayAdapter<QRGame> {
     private Context context;
 
     /**
-     *
+     * Initialize Custom List for QR
      * @param context
      * @param lists
      */

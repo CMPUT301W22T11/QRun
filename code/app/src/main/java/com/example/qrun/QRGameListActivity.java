@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,13 @@ public class QRGameListActivity extends AppCompatActivity {
     String username;
     Button isUpButton;
     boolean isUp = false;
+
+    /**
+     * get data and add it to the QR list, then notify the adapter
+     * @param queryDocumentSnapshots taken from the Firestore
+     * @param qrDataList the array lists contains the QR code
+     * @param qrAdapter
+     */
     public static void getData(QuerySnapshot queryDocumentSnapshots, ArrayList<QRGame> qrDataList,
                                 ArrayAdapter<QRGame> qrAdapter) {
         qrDataList.clear();
@@ -86,6 +94,12 @@ public class QRGameListActivity extends AppCompatActivity {
                             getData(queryDocumentSnapshots, qrDataList, qrAdapter);
                         });
             }
+        });
+        qrList.setOnItemClickListener((adapter, view, i, l) -> {
+            Intent intent = new Intent(this, QrSummary.class);
+            intent.putExtra("hexString", qrDataList.get(i).getHexString());
+            intent.putExtra("username", username);
+            startActivity(intent);
         });
         QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
         qrStorage.getCol().whereEqualTo("username", username)
