@@ -1,7 +1,12 @@
 package com.example.qrun;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -9,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,6 +29,31 @@ public class UserListingActivity extends AppCompatActivity {
     private ArrayList<User> userDataList;
     private UserStorage storage;
     private String username;
+    private FloatingActionButton camBut;
+    private Context ctx;
+    private ActivityResultLauncher<Intent> ac = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    // if result is 1, then update the list
+                    if(result.getResultCode() == 1) {
+                        Intent intent = result.getData();
+                        String userName = (String) intent.getSerializableExtra("QR");
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        UserStorage store = new UserStorage(db);
+                        store.get(userName, (check) -> {
+                            if(check != null) {
+                                Intent transfer = new Intent(ctx, UserProfileExternal.class);
+                                transfer.putExtra("userName", username);
+                                transfer.putExtra("externalUsername", userName);
+                                startActivity(transfer);
+                            }
+                        });
+                    }
+                }
+            }
+    );
     private void getData(QuerySnapshot queryDocumentSnapshots) {
         userDataList.clear();
         if(queryDocumentSnapshots != null) {
@@ -38,9 +69,11 @@ public class UserListingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_listing);
+        ctx = this;
         searchbut = findViewById(R.id.searchbut);
         searchBar = findViewById(R.id.searchplayer);
         userList = findViewById(R.id.playerlist);
+        camBut = findViewById(R.id.camera_button);
         userDataList = new ArrayList<>();
         userAdapter = new UserCustomList(this, userDataList);
         userList.setAdapter(userAdapter);
@@ -76,6 +109,10 @@ public class UserListingActivity extends AppCompatActivity {
             intent.putExtra("userName", username);
             intent.putExtra("externalUsername", userDataList.get(i).getUsername());
             startActivity(intent);
+        });
+        camBut.setOnClickListener((l) -> {
+            Intent intent = new Intent(ctx, ScanningActivity.class);
+            ac.launch(intent);
         });
     }
 }
