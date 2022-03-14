@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,9 +34,11 @@ public class MainScreen extends AppCompatActivity {
                     // if result is 1, then update the list
                     if(result.getResultCode() == 1) {
                         Log.d("add QR()", "ADD QR Successfully");
+                        Toast.makeText(ctx, "ADD QR Successfully", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Log.d("add QR()", "Failed to Add QR");
+                        Toast.makeText(ctx, "Failed to Add QR", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -43,10 +47,12 @@ public class MainScreen extends AppCompatActivity {
     Button mapsButton;
     String userName;
     ImageView qrCodeImage;
+    Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        ctx = this;
         qrCodeImage =  (ImageView) findViewById(R.id.qrCodeImage);
         Bundle extras = getIntent().getExtras();
         cameraBut = findViewById(R.id.cameraButton);
@@ -60,16 +66,6 @@ public class MainScreen extends AppCompatActivity {
         Bitmap qrGen= qrCodeGen.generateQRBitmap(userName,this);
         qrCodeImage=(ImageView) findViewById(R.id.qrCodeImage);
         qrCodeImage.setImageBitmap(qrGen);
-        userStorage.get(userName, (data)->{
-                    if(data!=null){
-
-
-                    }
-                }
-
-                );
-
-
     }
 
     public void cameraButton(View view){

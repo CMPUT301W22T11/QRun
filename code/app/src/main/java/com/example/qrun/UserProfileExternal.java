@@ -1,5 +1,6 @@
 package com.example.qrun;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -88,5 +89,11 @@ public class UserProfileExternal extends AppCompatActivity {
                 .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     QRGameListActivity.getData(queryDocumentSnapshots, qrDataList, qrAdapter);
                 });
+        QRList.setOnItemClickListener((adapter, view, i, l) -> {
+            Intent intent = new Intent(this, QrSummary.class);
+            intent.putExtra("hexString", qrDataList.get(i).getHexString());
+            intent.putExtra("username", actualUsername);
+            startActivity(intent);
+        });
     }
 }

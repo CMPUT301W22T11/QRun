@@ -35,6 +35,13 @@ public class Storage {
     public CollectionReference getCol() {
         return collectionReference;
     }
+
+    /**
+     * add datas and create new documents inside the collection
+     * @param docName name of the document
+     * @param value document fields with its data
+     * @param comp lambda expression to check if addition is successful
+     */
     public void add(String docName, Map<?, ?> value, @NonNull StoreOnComplete comp) {
         collectionReference
             .document(docName)
@@ -56,6 +63,13 @@ public class Storage {
                 }
             });
     }
+
+    /**
+     * update the existing document
+     * @param docName name of the document
+     * @param data document fields with its data
+     * @param comp lambda expression to check if update is succesful
+     */
     public void update(String docName, @NonNull Map<String, Object> data, @NonNull StoreOnComplete comp) {
         collectionReference.document(docName).update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -72,6 +86,12 @@ public class Storage {
             }
         });
     }
+
+    /**
+     * Get data from specific document
+     * @param docName the name of the document
+     * @param comp lambda expression to obtain the data
+     */
     public void get(String docName, @NonNull GetOnComplete comp) {
         collectionReference.document(docName).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -91,6 +111,12 @@ public class Storage {
             }
         });
     }
+
+    /**
+     * Delete the document
+     * @param docName document name
+     * @param comp lambda expression to check if delete is successful
+     */
     public void delete(String docName, @NonNull StoreOnComplete comp) {
         collectionReference.document(docName).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
