@@ -20,11 +20,8 @@ public class QRTest {
 
     @Test
     public void testQRGamePoints(){
-        QRGame qr = new QRGame("TestQr1", "tahiat", 10.0, 11.0, "");
-
-        qr.setHexString("696ce4dbd7bb57cbfe58b64f530f428b74999cb37e2ee60980490cd9552de3a6");
-
-        assertEquals(111, qr.getPoints());
+        QRGame qr = new QRGame("TestQr1\n", "tahiat", 10.0, 11.0, "");
+        assertEquals(39, qr.getPoints());
 
     }
 
