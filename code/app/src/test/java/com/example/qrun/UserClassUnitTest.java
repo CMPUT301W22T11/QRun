@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class UserClassUnitTest {
     Location TestLocation = new Location("TestLocation");
     User TestUser = new User(TestLocation, "TestUser");
-    QR TestQR=new QR("TestQR","TestUser");
+    QRGame TestQR=new QRGame("TestQR","TestUser",1,2,"TestPath");
     @BeforeEach
     public void settings() {
         TestUser.addQR(TestQR);
@@ -50,7 +50,7 @@ public class UserClassUnitTest {
     }
     @Test
     public void TestSetQrGameStatus(){
-        QR testQR2=new QR("TestQR","TestUser");
+        QRGame testQR2=new QRGame("TestQR2","TestUser",1,2,"TestPath");
         TestUser.setQrGameStatus(testQR2);
         assertEquals(testQR2,TestUser.getQRGameStatus());
     }
