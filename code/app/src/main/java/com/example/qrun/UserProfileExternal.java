@@ -1,18 +1,21 @@
 package com.example.qrun;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class PlayerProfile extends AppCompatActivity {
-    String userName;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.ArrayList;
+
+public class UserProfileExternal extends AppCompatActivity {
+    String userName, actualUsername;
     String email;
     String phone;
     String name;
@@ -24,23 +27,22 @@ public class PlayerProfile extends AppCompatActivity {
     TextView emailTV;
     TextView telTV;
     TextView streetAddressTV;
-    ImageView qrCodeImage;
+    ListView QRList;
+    ArrayAdapter<QRGame> qrAdapter;
+    ArrayList<QRGame> qrDataList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player_profile);
-        initTV();
+        setContentView(R.layout.activity_player_profile_external);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            userName = extras.getString("userName");
+            userName = extras.getString("externalUsername");
+            actualUsername = extras.getString("userName");
         }
+        initTV();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
-        QRGenerator qrCodeGen = new QRGenerator();
-        Bitmap qrGen= qrCodeGen.generateQRBitmap(userName,this);
-        qrCodeImage=(ImageView) findViewById(R.id.qrCodeIV);
-        qrCodeImage.setImageBitmap(qrGen);
         userStorage.get(userName, (data)->{
             if(data!=null){
                 name = (String) data.get("name");
@@ -67,7 +69,7 @@ public class PlayerProfile extends AppCompatActivity {
         }
         );
     }
-    public void initTV (){
+    private void initTV (){
         usernameTV = findViewById(R.id.userNameTV);
         uniqueQRRankTV = findViewById(R.id.QRCodeRank) ;
         totalNumQRTV = findViewById(R.id.numQRCode) ;
@@ -77,5 +79,21 @@ public class PlayerProfile extends AppCompatActivity {
         telTV= findViewById(R.id.teleTV);
         streetAddressTV= findViewById(R.id.streetAddressTV);
         nameTV.setText("Gewgwegwegweg");
+        QRList = findViewById(R.id.qrlist);
+        qrDataList = new ArrayList<>();
+        qrAdapter = new QRGameCustomList(this, qrDataList);
+        QRList.setAdapter(qrAdapter);
+        QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
+        qrStorage.getCol().whereEqualTo("username", userName)
+                .orderBy("points", Query.Direction.DESCENDING)
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    QRGameListActivity.getData(queryDocumentSnapshots, qrDataList, qrAdapter);
+                });
+        QRList.setOnItemClickListener((adapter, view, i, l) -> {
+            Intent intent = new Intent(this, QrSummary.class);
+            intent.putExtra("hexString", qrDataList.get(i).getHexString());
+            intent.putExtra("username", actualUsername);
+            startActivity(intent);
+        });
     }
 }

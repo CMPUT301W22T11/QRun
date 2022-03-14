@@ -4,6 +4,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class QRCalculation {
+    /**
+     * Hash the strings
+     * @param input the raw string
+     * @return the raw bytes after hashed
+     * @throws NoSuchAlgorithmException
+     */
     public static byte[] getSHA(String input) throws NoSuchAlgorithmException
     {
         // Static getInstance method is called with hashing SHA
@@ -15,6 +21,11 @@ public class QRCalculation {
         return md.digest(input.getBytes());
     }
 
+    /**
+     * Convert Byte to hex String
+     * @param hash the raw hash data
+     * @return the String modified hash
+     */
     public static String toHexString(byte[] hash)
     {
         StringBuilder result = new StringBuilder();

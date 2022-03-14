@@ -11,20 +11,4 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 public class UserStorageUnitTest {
-    FirebaseFirestore firestore;
-    @BeforeEach
-    public void setup() {
-//        FirebaseApp.initializeApp(this);
-        firestore = FirebaseFirestore.getInstance();
-        firestore.useEmulator("localhost", 8080);
-    }
-    @Test
-    public void add() {
-        UserStorage storage = new UserStorage(firestore);
-        HashMap<String, Object> testData = new HashMap();
-        testData.put("UUID", "1234567");
-        storage.add("mldang", testData, (boolean isTrue) -> {
-            assertTrue(isTrue);
-        });
-    }
 }

@@ -1,20 +1,23 @@
 package com.example.qrun;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 public class QR implements Serializable {
 
-    private String hexString;
+    String hexString;
     private byte[] bytes;
-
+    String username;
 
     /**
      * Constructor for QRGame takes in the text that the QRGame represents
      * The constructor uses this text to calculate the points of the QRGame
      * @param Text String that the QRGame code represents
      */
-    QR(String Text){
+    QR(String Text, String username){
 
         try{
             this.bytes = QRCalculation.getSHA(Text);
@@ -23,8 +26,19 @@ public class QR implements Serializable {
             //need to add error handling
         }
         this.hexString = QRCalculation.toHexString(this.bytes);
+        this.username = username;
+    }
+    public void setHexString(String hexString) {
+        this.hexString = hexString;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     /**
      *
