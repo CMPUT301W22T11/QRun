@@ -64,8 +64,6 @@ public class SignupFragment extends DialogFragment {
                                 store.add(username, preData, (boolean isTrue) -> {
                                     if(isTrue) {
                                         listener.onOkPressed(username);
-
-
                                     }
                                     else {
                                         listener.onOkPressed(null);

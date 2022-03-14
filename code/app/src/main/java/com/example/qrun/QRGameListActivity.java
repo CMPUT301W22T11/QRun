@@ -32,6 +32,13 @@ public class QRGameListActivity extends AppCompatActivity {
     String username;
     Button isUpButton;
     boolean isUp = false;
+
+    /**
+     * get data and add it to the QR list, then notify the adapter
+     * @param queryDocumentSnapshots taken from the Firestore
+     * @param qrDataList the array lists contains the QR code
+     * @param qrAdapter
+     */
     public static void getData(QuerySnapshot queryDocumentSnapshots, ArrayList<QRGame> qrDataList,
                                 ArrayAdapter<QRGame> qrAdapter) {
         qrDataList.clear();

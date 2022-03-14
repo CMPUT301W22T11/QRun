@@ -21,6 +21,12 @@ public class QRStorage extends Storage{
         String id = this.getCol().document().getId();
         this.add(id, value, comp);
     }
+
+    /**
+     * Delete the QR based on the QRGame
+     * @param qr the qr that is going to be deleted
+     * @param comp lambda expression to check if QR has been successfully deleted or not
+     */
     public void delete(QRGame qr, @NonNull StoreOnComplete comp) {
         String username = qr.getUsername();
         String hexString = qr.getHexString();
