@@ -11,20 +11,24 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
+/**
+ * User Profile Screen
+ */
 public class PlayerProfile extends AppCompatActivity {
-    String userName;
-    String email;
-    String phone;
-    String name;
-    TextView usernameTV;
-    TextView uniqueQRRankTV;
-    TextView totalNumQRTV;
-    TextView totalSumQRTV;
-    TextView nameTV;
-    TextView emailTV;
-    TextView telTV;
-    TextView streetAddressTV;
-    ImageView qrCodeImage;
+    private String userName;
+    private String email;
+    private String phone;
+    private String name;
+    private TextView usernameTV;
+    private TextView uniqueQRRankTV;
+    private TextView totalNumQRTV;
+    private TextView totalSumQRTV;
+    private TextView nameTV;
+    private TextView emailTV;
+    private TextView telTV;
+    private TextView streetAddressTV;
+    private ImageView qrCodeImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +71,7 @@ public class PlayerProfile extends AppCompatActivity {
         }
         );
     }
-    public void initTV (){
+    private void initTV (){
         usernameTV = findViewById(R.id.userNameTV);
         uniqueQRRankTV = findViewById(R.id.QRCodeRank) ;
         totalNumQRTV = findViewById(R.id.numQRCode) ;

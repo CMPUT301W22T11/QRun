@@ -40,6 +40,13 @@ public class QRCalculation {
         }
         return result.toString();
     }
+
+    /**
+     * Faster Power
+     * @param x
+     * @param n
+     * @return
+     */
     private static long myPow(int x, int n) {
         // return pow(x, n);
         long res = 1;

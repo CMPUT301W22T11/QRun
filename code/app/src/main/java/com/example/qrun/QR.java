@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+/**
+ * This is the QR class that for user status as well as QRGame
+ */
 public class QR implements Serializable {
 
     String hexString;

@@ -7,6 +7,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
+
+/**
+ * This is the main User class
+ */
 public class User {
     private ArrayList<QRGame> qrStore = new ArrayList<>() ;
     private QRGame qrGameStatus;
@@ -17,9 +21,11 @@ public class User {
         this.location = location;
         this.username = username;
     }
-    public User(QueryDocumentSnapshot document){
-        this.username = document.getId();
-    }
+
+    /**
+     * Initialize user by its Document Snapshot
+     * @param document
+     */
     public User(DocumentSnapshot document){
         this.username = document.getId();
     }
