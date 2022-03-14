@@ -19,7 +19,12 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QRGenerator {
-
+    /**
+     * Generate the QR Bitmap by its String
+     * @param Text the raw Text String
+     * @param context the context in which this QR is located
+     * @return Bitmap class for displaying
+     */
     public static Bitmap generateQRBitmap(String Text, Context context){
 
         Bitmap QRBitmap;

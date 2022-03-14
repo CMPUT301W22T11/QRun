@@ -24,7 +24,10 @@ import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.zxing.Result;
 
-
+/**
+ * This is the actual Scanning Activity, this will scan the QR Code, then send the raw String back
+ * to the previous Activity
+ */
 public class ScanningActivity extends AppCompatActivity {
 
     public static int SCAN_MODE_POINTS = 1;

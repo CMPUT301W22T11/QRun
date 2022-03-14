@@ -4,6 +4,10 @@ package com.example.qrun;
 import java.util.Date;
 import java.util.UUID;
 
+
+/**
+ * This is the comment class
+ */
 public class Comment{
     private String uid;
     private String qid;
@@ -11,7 +15,14 @@ public class Comment{
     private String commentId;
     private Date date;
     private Long unixTime;
-    public Comment(String qid,String uid, String comment) {//constructor to create initial comment
+
+    /**
+     * constructor to create initial comment
+     * @param qid QR Hash String
+     * @param uid username
+     * @param comment content of the comment
+     */
+    public Comment(String qid,String uid, String comment) {//
         this.uid = uid;
         this.comment = comment;
         this.qid = qid;
@@ -20,7 +31,14 @@ public class Comment{
         this.commentId = UUID.randomUUID().toString();
     }
 
-    public Comment(String qid, String uid, String comment, String commentId) {//constructor to make commentId consistent
+    /**
+     * constructor to make commentId consistent
+     * @param qid QR Hash String
+     * @param uid username
+     * @param comment content of the comment
+     * @param commentId the comment id
+     */
+    public Comment(String qid, String uid, String comment, String commentId) {
         this.uid = uid;
         this.qid = qid;
         this.comment = comment;

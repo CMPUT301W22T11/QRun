@@ -38,18 +38,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Test Class for Robotium
+ */
 public class QrContentActivity extends AppCompatActivity implements AddCommentFragment.OnFragmentInteractionListener, CommentViewFragment.OnFragmentInteractionListener {
     ListView commentList;
     ArrayAdapter<Comment> commentAdapter;
     ArrayList<Comment> commentContentList;
     String QRid;
     FirebaseFirestore db;
-    //    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//    FirebaseUser user = mAuth.getCurrentUser();
     String uid;
-
-
-
     Comment tempComment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

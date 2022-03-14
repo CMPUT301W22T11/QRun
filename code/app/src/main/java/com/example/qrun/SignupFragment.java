@@ -21,6 +21,10 @@ import com.google.firebase.firestore.Query;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * This is the Signup Fragment for the Users
+ */
 public class SignupFragment extends DialogFragment {
     private EditText nameText;
     private EditText usernameText;
@@ -30,6 +34,11 @@ public class SignupFragment extends DialogFragment {
     public interface OnFragmentInteractionListener {
         void onOkPressed(String name);
     }
+
+    /**
+     * attach for its context
+     * @param context
+     */
     public void onAttach(Context context) {
         super.onAttach(context);
         if(context instanceof OnFragmentInteractionListener) {
@@ -37,6 +46,12 @@ public class SignupFragment extends DialogFragment {
         }
         else throw new RuntimeException(context.toString() + " must implemented");
     }
+
+    /**
+     * Create the Dialog
+     * @param savedInstanceState
+     * @return
+     */
     public AlertDialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.signupfragmentlayout, null);
         nameText = view.findViewById(R.id.name);

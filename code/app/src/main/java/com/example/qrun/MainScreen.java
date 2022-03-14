@@ -25,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
+/**
+ * Main Screen after login
+ */
 public class MainScreen extends AppCompatActivity {
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -68,6 +71,10 @@ public class MainScreen extends AppCompatActivity {
         qrCodeImage.setImageBitmap(qrGen);
     }
 
+    /**
+     * The callback for camera button
+     * @param view
+     */
     public void cameraButton(View view){
         cameraBut.setOnClickListener((l) -> {
             Intent intent = new Intent(this, AddGameQR.class);
@@ -75,12 +82,14 @@ public class MainScreen extends AppCompatActivity {
             ac.launch(intent);
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){

@@ -12,11 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+
+/**
+ * This class is to display a single content
+ */
 public class CustomComment extends ArrayAdapter<Comment> {
 
     private ArrayList<Comment> comments;
     private Context context;
 
+
+    /**
+     * Constructor for custom comment
+     * @param context the context in which this list is located
+     * @param comments the comment references
+     */
 
     public CustomComment(@NonNull Context context, ArrayList<Comment> comments) {
         super(context,0,comments);

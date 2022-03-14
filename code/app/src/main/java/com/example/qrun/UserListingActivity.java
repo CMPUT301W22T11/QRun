@@ -21,6 +21,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+
+/**
+ * This is the user listing activity to display the user, as well as searching for the user
+ */
 public class UserListingActivity extends AppCompatActivity {
     private EditText searchBar;
     private Button searchbut;
@@ -87,6 +91,7 @@ public class UserListingActivity extends AppCompatActivity {
         {
             getData(queryDocumentSnapshots);
         });
+        // if search button is clicked
         searchbut.setOnClickListener((l) -> {
              String userName = searchBar.getText().toString();
              if(userName.compareTo("") == 0) {

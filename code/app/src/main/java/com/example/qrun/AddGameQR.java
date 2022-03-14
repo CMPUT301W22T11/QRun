@@ -21,6 +21,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The purpose of this class is to add the game QR by its intent
+ */
 public class AddGameQR extends AppCompatActivity {
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -135,7 +138,8 @@ public class AddGameQR extends AppCompatActivity {
                                     ErrorFinish();
                                 }
                             }
-                        });            }
+                        });
+            }
             else {
                 ErrorFinish();
             }
