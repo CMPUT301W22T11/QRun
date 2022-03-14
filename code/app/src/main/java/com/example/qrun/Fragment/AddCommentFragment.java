@@ -16,8 +16,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.qrun.Comment;
 import com.example.qrun.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 
 public class AddCommentFragment extends DialogFragment {
 //    FirebaseAuth mAuth = FirebaseAuth.getInstance();

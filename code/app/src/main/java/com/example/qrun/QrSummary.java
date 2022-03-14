@@ -43,6 +43,7 @@ CommentViewFragment.OnFragmentInteractionListener {
     private Context ctx = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //initializes consistently used variables
         super.onCreate(savedInstanceState);
         binding = ActivityQrSummaryBinding.inflate(getLayoutInflater());
         commentStorage = new CommentStorage(FirebaseFirestore.getInstance());
@@ -53,12 +54,16 @@ CommentViewFragment.OnFragmentInteractionListener {
             username = extras.getString("username");
         }
         ctx = this;
+
+        //Initializes the two lists for usage
         ArrayList<String> sharedUsers = new ArrayList<>();
         sharedQrAdapter = new ArrayAdapter<String>(this, R.layout.list_layout, sharedUsers);
         binding.sharedQrList.setAdapter(sharedQrAdapter);
         commentContentList = new ArrayList<>();
         commentAdapter = new CustomComment(this, commentContentList);
         binding.commentList.setAdapter(commentAdapter);
+
+        //Queries the Firestore database for all users who share a qr code
         QRStorage QrRun = new QRStorage(FirebaseFirestore.getInstance());
         QrRun.getCol().whereEqualTo("hexString", hexString).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -84,6 +89,8 @@ CommentViewFragment.OnFragmentInteractionListener {
                         }
                     }
                 });
+
+        //Queries the Firestore database for all comments on the qrcode
         commentStorage.getCol().whereEqualTo("qrCommented",hexString)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() { //add a snapshot tp query all comments related to current QRid
                     @Override
@@ -99,6 +106,8 @@ CommentViewFragment.OnFragmentInteractionListener {
                         commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
                     }
                 });
+
+        //focuses and presents a selected comment in full
         binding.commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {  //show a dialog with comment text in it when short clicked
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -111,6 +120,8 @@ CommentViewFragment.OnFragmentInteractionListener {
                 viewComment.show(getSupportFragmentManager(),"view_comment");
             }
         });
+
+        //sets the add comment functionality
         binding.addComment.setOnClickListener(new View.OnClickListener() {//pop up dialog when float button pressed
             @Override
             public void onClick(View view) {
@@ -124,6 +135,8 @@ CommentViewFragment.OnFragmentInteractionListener {
 
             }
         });
+
+        //deletes the current qr code
         QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
         qrStorage.getCol().whereEqualTo("hexString", hexString)
                 .whereEqualTo("username", username)
@@ -145,6 +158,8 @@ CommentViewFragment.OnFragmentInteractionListener {
                 });
 
     }
+
+    //sends a newly minted qr code to the firestore database
     public void onOkPressed(Comment newComment) {
         commentContentList.add(newComment);                             //add new comment object into local data list
         HashMap<String, Object> comments = new HashMap<>();

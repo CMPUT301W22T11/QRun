@@ -17,6 +17,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/points"
+                android:textSize="17dp"
                 android:text="@string/points"
                 android:layout_margin="5dp">
             </TextView>
@@ -26,12 +27,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/Location"
                 android:layout_margin="5dp"
+                android:textSize="17dp"
                 android:text="@string/location">
             </TextView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="17dp"
                 android:text="@string/also_owned_by"
                 android:layout_margin="5dp"
                 android:id="@+id/shared_qrs">
@@ -47,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comments"
+                android:textSize="17dp"
                 android:layout_margin="5dp"
                 android:text="@string/comments">
             </TextView>

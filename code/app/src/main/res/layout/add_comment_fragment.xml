@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="comment_fragment_tag"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:counterEnabled="true"
+    app:counterMaxLength="256">
 
     <EditText
         android:id="@+id/comment_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Add a comment no longer than 256 character"
+        android:textSize="17dp"
+        android:hint="Add a comment under 256 characters"
         android:inputType="text"
         android:maxLength="256"/>
 
-</LinearLayout>
+</com.google.android.material.textfield.TextInputLayout>

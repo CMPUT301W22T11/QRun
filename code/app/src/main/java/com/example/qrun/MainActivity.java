@@ -26,6 +26,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener
 {
+    //Automatically logs in the user if there is a username stored
     private void login(@NonNull String username) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage store = new UserStorage(db);
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
             }
         });
     }
+
+    //Launches the registration activity
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {

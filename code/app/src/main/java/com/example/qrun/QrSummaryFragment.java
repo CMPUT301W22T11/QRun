@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-
+//Depreciated, unused in main
 public class QrSummaryFragment extends Fragment {
 
     private QrSummaryFragmentBinding binding;
