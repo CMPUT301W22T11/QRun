@@ -32,6 +32,11 @@ public class Storage {
         this.db = db;
         collectionReference = this.db.collection(colName);
     }
+
+    /**
+     * get Collections from class
+     * @return the collection reference
+     */
     public CollectionReference getCol() {
         return collectionReference;
     }

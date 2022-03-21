@@ -29,6 +29,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * This is the QR Summary Screen for a specific QR
+ */
 public class QrSummary extends AppCompatActivity implements AddCommentFragment.OnFragmentInteractionListener,
 CommentViewFragment.OnFragmentInteractionListener {
     private ActivityQrSummaryBinding binding;

@@ -12,11 +12,20 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+
+/**
+ * Custom User Content to display
+ */
 public class UserCustomList extends ArrayAdapter<User> {
 
     private ArrayList<User> UserGameList;
     private Context context;
 
+    /**
+     * Initialize the User custom List
+     * @param context The Activity Context that this class is located
+     * @param lists the user lists references
+     */
     public UserCustomList(Context context, ArrayList<User> lists){
         super(context,0, lists);
         this.UserGameList = lists;

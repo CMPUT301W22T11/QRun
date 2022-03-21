@@ -14,6 +14,10 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
+/**
+ * This class is similar to the PlayerProfile, however this is meant for displaying user profile
+ * after searching from user listing activity
+ */
 public class UserProfileExternal extends AppCompatActivity {
     String userName, actualUsername;
     String email;

@@ -25,6 +25,9 @@ import org.w3c.dom.Document;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This is the screen to display all QR Game list for a user
+ */
 public class QRGameListActivity extends AppCompatActivity {
     ListView qrList;
     ArrayAdapter<QRGame> qrAdapter;

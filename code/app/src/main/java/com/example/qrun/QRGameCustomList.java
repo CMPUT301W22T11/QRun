@@ -14,6 +14,10 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+
+/**
+ * This is to display the QR Game single content when it is displayed in list
+ */
 public class QRGameCustomList extends ArrayAdapter<QRGame> {
 
     private ArrayList<QRGame> QRGameList;

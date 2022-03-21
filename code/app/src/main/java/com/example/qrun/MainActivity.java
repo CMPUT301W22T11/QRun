@@ -23,10 +23,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
 
-
+/**
+ * The Screen Before Login/Signup
+ */
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener
 {
-    //Automatically logs in the user if there is a username stored
+    /**
+     * Login based on its username
+     * @param username
+     */
     private void login(@NonNull String username) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage store = new UserStorage(db);
@@ -63,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
         Login = findViewById(R.id.login_button);
         ctx = this;
         prefs = this.getSharedPreferences(
-                "com.example.app", Context.MODE_PRIVATE);
+                "com.example.app", Context.MODE_PRIVATE); // Get the Shared preferences
         String usrName = prefs.getString("usrName", null);
         if(usrName != null) {
             login(usrName);
