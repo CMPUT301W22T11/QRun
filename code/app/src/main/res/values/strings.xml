@@ -17,5 +17,6 @@
     <string name="also_owned_by">Also owned by:</string>
     <string name="comments">Comments:</string>
     <string name="delete_current_qr_code">Delete current Qr code</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>
