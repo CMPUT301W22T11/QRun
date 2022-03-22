@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 /**
  * Class to represent Scanned QRGame codes as a form of
  * Text, bytes, hexString and the points of the QRGame code
@@ -19,7 +21,7 @@ import java.util.Map;
 public class QRGame extends QR implements Serializable {
 
     private long points;
-    private double lat, lon;
+    private Double lat, lon;
     private String path;
 
     /**
@@ -27,7 +29,7 @@ public class QRGame extends QR implements Serializable {
      * The constructor uses this text to calculate the points of the QRGame
      * @param Text String that the QRGame code represents
      */
-    public QRGame(String Text, String username, double lat, double lon, String path){
+    public QRGame(String Text, String username, @Nullable double lat, @Nullable double lon,@Nullable String path){
         super(Text, username);
         this.points = QRCalculation.calcScore(this.getHexString());
         this.lat = lat;
@@ -45,8 +47,8 @@ public class QRGame extends QR implements Serializable {
         Map<String, Object> l = id.getData();
         this.username = (String)l.get("username");
         this.hexString = (String)l.get("hexString");
-        this.lat = (double)l.get("latitude");
-        this.lon = (double)l.get("longitude");
+        this.lat = (Double)l.get("latitude");
+        this.lon = (Double)l.get("longitude");
         this.path = (String)l.get("PicPath");
         this.points = (long)l.get("points");
     }
@@ -54,19 +56,19 @@ public class QRGame extends QR implements Serializable {
         this.points = points;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(@Nullable Double lat) {
         this.lat = lat;
     }
 
-    public double getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(@Nullable Double lon) {
         this.lon = lon;
     }
 
@@ -74,7 +76,7 @@ public class QRGame extends QR implements Serializable {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(@Nullable String path) {
         this.path = path;
     }
 

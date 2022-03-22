@@ -134,8 +134,8 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
     private Button cancelbut, addbut, scanbut;
     private TextView hashId, pointsId;
     private String path = ""; // TODO: modify this when we can take picture
-    private double lat = 0.0; //TODO: modify this when we have an actual map
-    private double lon = 0.0; //TODO: modify this when we have an actual map
+    private Double lat = null; //TODO: modify this when we have an actual map
+    private Double lon = null; //TODO: modify this when we have an actual map
     private String username;
     private Context ctx;
     private LocationManager locationManager;
@@ -194,8 +194,9 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
 
     @Override
     public void onDiscard() {
-        qr.setLat(-1);
-        qr.setLon(-1);
+        qr.setLat(null);
+        qr.setLon(null);
+        qr.setPath(null);
 
         if(qr != null) {
             QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());

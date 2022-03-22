@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -19,7 +20,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,12 +57,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
 
-        String image = "test String"; // will be replaced by resource from the firestore
 
 
-        points.add(new QRGame("one", "test", 53.523220, -113.526321, image));
-        points.add(new QRGame("two", "test", 53.427920, -113.528660, image));
-        points.add(new QRGame("three", "test", 53.518050, -113.446460, image));
+        //points.add(new QRGame("one", "test", 53.523220, -113.526321, image));
+        //points.add(new QRGame("two", "test", 53.427920, -113.528660, image));
+        //points.add(new QRGame("three", "test", 53.518050, -113.446460, image));
+
 
 
 
@@ -86,22 +91,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        QRGame qr;
+        //get the QRs from storage
+        QrRun.collection("QR").get()
+                .addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(DocumentSnapshot document : task.getResult()){
+                                points.add(new QRGame(document));
+
+                                QRGame qr;
 
 
 
-        // Add a marker
-        for(int i = 0; i < points.size(); i++){
-            qr = points.get(i);
-            LatLng add = new LatLng(qr.getLat(), qr.getLon());
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(add)
-                    .title(String.valueOf(qr.getPoints()))
-            );
+                                // Add a marker
+                                for(int i = 0; i < points.size(); i++){
+                                    qr = points.get(i);
+                                    LatLng add = new LatLng(qr.getLat(), qr.getLon());
+                                    Marker marker = mMap.addMarker(new MarkerOptions()
+                                            .position(add)
+                                            .title(String.valueOf(qr.getPoints()))
+                                    );
 
-            images.put(marker, qr.getPath());
+                                    images.put(marker, qr.getPath());
 
-        }
+                                }
+
+                            }
+                        }
+                        else{
+                            Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Storage get", "Could not retrieve data", task.getException());
+                        }
+                    }
+                }));
+
+
+
+
+
+
 
 
 
