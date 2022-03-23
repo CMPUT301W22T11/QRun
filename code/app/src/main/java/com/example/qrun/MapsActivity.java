@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, ImagePopup.OnFragmentInteractionListener {
 
@@ -36,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager locationManager;
     private ArrayList<QRGame> points = new ArrayList<>();
     private HashMap<Marker, String> images = new HashMap<>();
+    private ArrayList<Marker> markers = new ArrayList<>();
     FirebaseFirestore QrRun;
 
     @SuppressLint("MissingPermission")
@@ -100,27 +102,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             for(DocumentSnapshot document : task.getResult()){
                                 points.add(new QRGame(document));
 
-                                QRGame qr;
+                            }
+                            QRGame qr;
 
+                            Random rand = new Random();
 
-
-                                // Add a marker
-                                for(int i = 0; i < points.size(); i++){
-                                    qr = points.get(i);
+                            // Add a marker
+                            for(int i = 0; i < points.size(); i++){
+                                qr = points.get(i);
+                                if(qr.getLat() != null && qr.getLon() != null){
                                     LatLng add = new LatLng(qr.getLat(), qr.getLon());
+                                    if(samePointMarkerHandler(add)){
+                                        add = new LatLng(qr.getLat() + (rand.nextInt(10)*0.01), qr.getLon() + (rand.nextInt(10) * 0.01));
+                                    }
                                     Marker marker = mMap.addMarker(new MarkerOptions()
                                             .position(add)
                                             .title(String.valueOf(qr.getPoints()))
                                     );
-
+                                    Log.d("Storage get", "-------------------------------------------------------" + add.toString());
                                     images.put(marker, qr.getPath());
-
+                                    markers.add(marker);
                                 }
+
 
                             }
                         }
                         else{
-                            Log.d("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Storage get", "Could not retrieve data", task.getException());
+                            Log.d("Storage get", "Could not retrieve data", task.getException());
                         }
                     }
                 }));
@@ -152,6 +160,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    //if a marker is at the same point
+    //a small offset needs to be set to distinguish each value
+    private boolean samePointMarkerHandler(LatLng point){
 
+        for(Marker marker : markers){
+            if(point.equals(marker.getPosition())){
+                return true;
+
+            }
+        }
+        return false;
+    }
 
 }
