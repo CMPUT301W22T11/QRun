@@ -37,7 +37,15 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
         UserStorage store = new UserStorage(db);
         store.get(username, (check) -> {
             if(check != null) {
-                onOkPressed(username);
+                Log.d("Login", username);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("usrName", username);
+                editor.commit();
+                Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainScreen.class);
+                intent.putExtra("userName",username);
+                startActivity(intent);
+//                onOkPressed(username);
             }
         });
     }
@@ -91,13 +99,13 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("usrName", name);
             editor.commit();
-            Toast.makeText(MainActivity.this, "Login/Signup Successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Signup Successful!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainScreen.class);
             intent.putExtra("userName",name);
             startActivity(intent);
         }
         else {
-            Toast.makeText(MainActivity.this, "Unable to identify user", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "This Username already exist", Toast.LENGTH_SHORT).show();
         }
 
     }
