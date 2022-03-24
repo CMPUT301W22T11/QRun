@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -59,15 +60,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
 
-
-
+        QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
         //points.add(new QRGame("one", "test", 53.523220, -113.526321, image));
         //points.add(new QRGame("two", "test", 53.427920, -113.528660, image));
         //points.add(new QRGame("three", "test", 53.518050, -113.446460, image));
-
-
-
-
     }
 
     /**
@@ -87,7 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(@NonNull Marker marker) {
 
-                ImagePopup.newInstance(images.get("images")).show(getSupportFragmentManager(), "Image");
+                ImagePopup.newInstance(images.get(marker)).show(getSupportFragmentManager(), "Image");
 
                 return false;
             }
@@ -123,8 +119,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     images.put(marker, qr.getPath());
                                     markers.add(marker);
                                 }
-
-
                             }
                         }
                         else{

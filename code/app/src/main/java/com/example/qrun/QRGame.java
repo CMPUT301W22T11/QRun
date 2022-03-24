@@ -23,7 +23,7 @@ public class QRGame extends QR implements Serializable {
     private long points;
     private Double lat, lon;
     private String path;
-
+    private DocumentSnapshot snapshot;
     /**
      * Constructor for QRGame takes in the text that the QRGame represents
      * The constructor uses this text to calculate the points of the QRGame
@@ -44,10 +44,11 @@ public class QRGame extends QR implements Serializable {
      */
     public QRGame(DocumentSnapshot id) {
         super("", null);
+        snapshot = id;
         Map<String, Object> l = id.getData();
         this.username = (String)l.get("username");
         this.hexString = (String)l.get("hexString");
-        this.lat = (Double)l.get("latitude");
+        this.lat = (Double) l.get("latitude");
         this.lon = (Double)l.get("longitude");
         this.path = (String)l.get("PicPath");
         this.points = (long)l.get("points");

@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import javax.annotation.Nullable;
 
 public class ImagePopup extends AppCompatDialogFragment {
@@ -57,13 +60,16 @@ public class ImagePopup extends AppCompatDialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.image_popup, null);
 
         String img = getArguments().getString("image");
-
+        final long ONE_MEGABYTE = 1024 * 1024;
         imageView = view.findViewById(R.id.image_view);
-
-        imageView.setImageBitmap(stringToBitmap(img));
-
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference pathReference = storageRef.child(img);
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener((bytes) -> {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            imageView.setImageBitmap(bitmap);
+            }
+        );
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
         return builder
                 .setView(view)
                 .setTitle("Image")
