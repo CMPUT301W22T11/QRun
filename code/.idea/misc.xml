@@ -17,11 +17,10 @@
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_main_screen.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/layout/activity_player_profile.xml" value="0.75" />
         <entry key="..\:/Users/limzi/AndroidStudioProjects/QRun/code/app/src/main/res/menu/menu.xml" value="0.25" />
-        <entry key="..\:/Users/tahia/AndroidStudioProjects/New_QRUN/QRun/code/app/src/main/res/layout/activity_maps.xml" value="0.15374873353596757" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

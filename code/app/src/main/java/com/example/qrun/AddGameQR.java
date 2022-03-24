@@ -8,11 +8,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,9 +26,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -58,66 +66,11 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                     if (result.getResultCode() == RESULT_OK) {
                         Bundle extras = result.getData().getExtras();
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        qr.setPath(bitmapToString(imageBitmap));
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                         Log.d("QR Locations", String.valueOf(qr.getLat()) + " " + String.valueOf(qr.getLon()));
                         Log.d("----------------------------------------------------------------------------------------------------------------\n", qr.getPath());
                         if(qr != null) {
-                            QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
-                            UserStorage user = new UserStorage(FirebaseFirestore.getInstance());
-                            HashMap<String, Object> data = new HashMap<>();
-                            data.put("username", qr.getUsername());
-                            data.put("hexString", qr.getHexString());
-                            data.put("points", qr.getPoints());
-                            data.put("latitude", qr.getLat());
-                            data.put("longitude", qr.getLon());
-                            data.put("PicPath", qr.getPath());
-
-                            storage.add(data, (isSuccess) -> {
-                                if(isSuccess) {
-                                    Log.d("QRGame", "Created Successfully");
-                                    user.get(username, (userData) -> {
-                                        if(userData != null) {
-                                            long totalPoints, totalScanned;
-                                            Object temp = userData.get("totalpoints");
-                                            if(temp == null) {
-                                                totalPoints = qr.getPoints();
-                                            }
-                                            else {
-                                                totalPoints = (long)temp;
-                                                totalPoints += qr.getPoints();
-                                            }
-                                            temp = userData.get("totalscannedqr");
-                                            if(temp == null) {
-                                                totalScanned = 1;
-                                            }
-                                            else {
-                                                totalScanned = (long)temp;
-                                                totalScanned++;
-                                            }
-                                            userData.put("totalscannedqr", totalScanned);
-                                            userData.put("totalpoints", totalPoints);
-                                            user.update(username, userData, (isUserSuccess) -> {
-                                                if(isUserSuccess) {
-                                                    Intent intent = new Intent();
-                                                    setResult(1, intent);
-                                                    finish();
-                                                }
-                                                else {
-                                                    ErrorFinish();
-                                                }
-                                            });
-
-                                        }
-                                        else {
-                                            ErrorFinish();
-                                        }
-                                    });
-
-                                }
-                                else {
-                                    ErrorFinish();
-                                }
-                            });
+                            addQR(qr, imageBitmap);
                         }
                         else {
                             ErrorFinish();
@@ -188,79 +141,85 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cam.launch(takePictureIntent);
-
-
     }
 
     @Override
     public void onDiscard() {
         qr.setLat(null);
         qr.setLon(null);
-        qr.setPath(null);
-
+//        qr.setPath(null);
         if(qr != null) {
-            QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
-            UserStorage user = new UserStorage(FirebaseFirestore.getInstance());
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("username", qr.getUsername());
-            data.put("hexString", qr.getHexString());
-            data.put("points", qr.getPoints());
-            data.put("latitude", qr.getLat());
-            data.put("longitude", qr.getLon());
-            data.put("PicPath", qr.getPath());
-            Log.d("QR Locations", String.valueOf(qr.getLat()) + " " + String.valueOf(qr.getLon()));
-            storage.add(data, (isSuccess) -> {
-                if(isSuccess) {
-                    Log.d("QRGame", "Created Successfully");
-                    user.get(username, (userData) -> {
-                        if(userData != null) {
-                            long totalPoints, totalScanned;
-                            Object temp = userData.get("totalpoints");
-                            if(temp == null) {
-                                totalPoints = qr.getPoints();
-                            }
-                            else {
-                                totalPoints = (long)temp;
-                                totalPoints += qr.getPoints();
-                            }
-                            temp = userData.get("totalscannedqr");
-                            if(temp == null) {
-                                totalScanned = 1;
-                            }
-                            else {
-                                totalScanned = (long)temp;
-                                totalScanned++;
-                            }
-                            userData.put("totalscannedqr", totalScanned);
-                            userData.put("totalpoints", totalPoints);
-                            user.update(username, userData, (isUserSuccess) -> {
-                                if(isUserSuccess) {
-                                    Intent intent = new Intent();
-                                    setResult(1, intent);
-                                    finish();
-                                }
-                                else {
-                                    ErrorFinish();
-                                }
-                            });
-
-                        }
-                        else {
-                            ErrorFinish();
-                        }
-                    });
-
-                }
-                else {
-                    ErrorFinish();
-                }
-            });
+            addQR(qr, null);
         }
         else {
             ErrorFinish();
         }
     }
+    private void addQR(QRGame qr, Bitmap bitmap) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("username", qr.getUsername());
+        data.put("hexString", qr.getHexString());
+        data.put("points", qr.getPoints());
+        data.put("latitude", qr.getLat());
+        data.put("longitude", qr.getLon());
+        data.put("PicPath", qr.getPath());
+        QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
+        UserStorage user = new UserStorage(FirebaseFirestore.getInstance());
+        storage.getCol().whereEqualTo("username", qr.getUsername())
+                .whereEqualTo("hexString", qr.getHexString())
+                .get()
+                .addOnCompleteListener((task) -> {
+                    if(task.isSuccessful()) {
+                        QuerySnapshot document = task.getResult();
+                        if(document.size() == 0) {
+                            // upload image
+                            if(bitmap != null) {
+                                String id = storage.getCol().document().getId();
+                                StorageReference ref = FirebaseStorage.getInstance().getReference();
+                                StorageReference imagesRef = ref.child(id + ".jpg");
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                byte[] dataImg = baos.toByteArray();
+                                UploadTask uploadTask = imagesRef.putBytes(dataImg);
+                                uploadTask.addOnCompleteListener((l) -> {
+                                    data.put("PicPath", id + ".jpg");
+                                    storage.add(id, data, (isComplete) -> {
+                                        if(isComplete) {
+                                            user.updateUser(qr.getUsername(), storage, (isSuccess) -> {
+                                                if(isSuccess) {
+                                                    Intent intent = new Intent();
+                                                    setResult(1, intent);
+                                                    finish();
+                                                }
+                                                else {
+                                                    ErrorFinish();
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            ErrorFinish();
+                                        }
+                                    });
+                                }).addOnFailureListener((l) -> ErrorFinish());
+                            }
+                            else {
+                                storage.add(data, (isComplete) -> {
+                                    if(isComplete) {
 
+                                    }
+                                    else {
+                                        ErrorFinish();
+                                    }
+                                });
+                            }
+
+                        }
+                        else {
+                            ErrorFinish();
+                        }
+                    }
+                });
+    }
     @Override
     public void onLocationChanged(@NonNull Location location) {
         position = new LatLng(location.getLatitude(), location.getLongitude());
@@ -282,7 +241,15 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
             return "";
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+            //Start your code
+        } else {
+            //Show snackbar
+        }
+    }
 }
