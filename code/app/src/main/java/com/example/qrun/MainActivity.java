@@ -31,18 +31,7 @@ import java.io.File;
  */
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener
 {
-    private final static int SUCCESS = 0;
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
-            //Start your code
-        } else {
-            //Show snackbar
-        }
-    }
     /**
      * Login based on its username
      * @param username
@@ -80,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
         setContentView(R.layout.activity_main);
         Signup = findViewById(R.id.signup_button);
         Login = findViewById(R.id.login_button);
-        this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION}, SUCCESS);
         ctx = this;
         prefs = this.getSharedPreferences(
                 "com.example.app", Context.MODE_PRIVATE); // Get the Shared preferences

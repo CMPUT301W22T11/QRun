@@ -5,9 +5,12 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +32,7 @@ import java.util.Map;
  * Main Screen after login
  */
 public class MainScreen extends AppCompatActivity {
+    private final static int SUCCESS = 0;
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -46,6 +50,17 @@ public class MainScreen extends AppCompatActivity {
                 }
             }
     );
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+            //Start your code
+        } else {
+            //Show snackbar
+        }
+    }
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
@@ -53,7 +68,10 @@ public class MainScreen extends AppCompatActivity {
     Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION}, SUCCESS);
         setContentView(R.layout.activity_main_screen);
         ctx = this;
         qrCodeImage =  (ImageView) findViewById(R.id.qrCodeImage);
