@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * This class is similar to the PlayerProfile, however this is meant for displaying user profile
  * after searching from user listing activity
  */
+//TODO make a profile superclass?
 public class UserProfileExternal extends AppCompatActivity {
     String userName, actualUsername;
     String email;
@@ -81,7 +82,6 @@ public class UserProfileExternal extends AppCompatActivity {
         nameTV = findViewById(R.id.nameTV);
         emailTV= findViewById(R.id.emailTV);
         telTV= findViewById(R.id.teleTV);
-        streetAddressTV= findViewById(R.id.streetAddressTV);
         nameTV.setText("Gewgwegwegweg");
         QRList = findViewById(R.id.qrlist);
         qrDataList = new ArrayList<>();
