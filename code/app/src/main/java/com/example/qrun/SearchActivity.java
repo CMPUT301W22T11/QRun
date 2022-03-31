@@ -69,9 +69,13 @@ public class SearchActivity extends AppCompatActivity {
             qrAdapter.notifyDataSetChanged();
         });
         qrList.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent returnIntent = new Intent(this,MapsActivity.class);
-            returnIntent.putExtra("selectedQr",qrDisList.get(i).getqHash());//sent preferred location back to map
-            startActivity(returnIntent);
+            Intent intent = new Intent();
+            intent.putExtra("selectedQr",qrDisList.get(i).getqHash());//sent preferred location back to map
+            setResult(222,intent);
+            finish();
+//            Intent returnIntent = new Intent(this,MapsActivity.class);
+//            returnIntent.putExtra("selectedQr",qrDisList.get(i).getqHash());//sent preferred location back to map
+//            startActivity(returnIntent);
         });
     }
     /**

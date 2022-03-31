@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,9 +22,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.qrun.databinding.ActivityMapsBinding;
+import com.google.android.gms.common.util.concurrent.HandlerExecutor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,6 +59,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Marker> markers = new ArrayList<>();
     FirebaseFirestore QrRun;
     Marker preferredQrMarker;
+    Button searchBut;
+    private EditText locationSearch;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -64,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         QrRun = FirebaseFirestore.getInstance();
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        locationSearch = (EditText) findViewById(R.id.location_text);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -98,8 +104,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(@NonNull Marker marker) {
 
                 ImagePopup.newInstance(images.get(marker)).show(getSupportFragmentManager(), "Image");
-
-                return false;
+                marker.showInfoWindow();
+                return true;
             }
         });
 
@@ -131,8 +137,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             .title(String.valueOf(qr.getPoints()))
                                     );
                                     Log.d("Storage get", "-------------------------------------------------------" + add.toString());
+                                    Log.d("Storage get", "-------------------------------------------------------" + String.valueOf(qr.getPoints()));
                                     images.put(marker, qr.getPath());
                                     markers.add(marker);
+
                                 }
                             }
                         }
@@ -181,34 +189,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return false;
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 101 && resultCode == RESULT_OK && data != null) {
-//
-//            if(data.hasExtra("selectedQr")) {
-//                String preferredQr = getIntent().getExtras().getString("selectedQr");
-//                DocumentReference docRef = QrRun.collection("QR").document(preferredQr);
-//                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentSnapshot document = task.getResult();
-//                            QRGame selectedQr = new QRGame(document);
-//                            LatLng selectedPosition = new LatLng(selectedQr.getLat(),selectedQr.getLon());
-//                            preferredQrMarker = mMap.addMarker(new MarkerOptions()
-//                                    .position(selectedPosition)
-//                                    .title(String.valueOf(selectedQr.getPoints()))
-//                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-//                            images.put(preferredQrMarker, selectedQr.getPath());
-//                            markers.add(preferredQrMarker);
-//                        }
-//                    }
-//                });
-//
-//            }
-//        }
-//    }
 
     /**
      * move the camera to the location specified by user showing QRs nearby
@@ -217,18 +197,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * @author lucheng
      */
     public void searchLocation(View view) {
-        EditText locationSearch = (EditText) findViewById(R.id.location_text);
         String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
+        List<Address> addressList = new ArrayList<>();
 
-        if (location != null || !location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
+        Geocoder geocoder = new Geocoder(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+        try {
+            addressList.addAll(geocoder.getFromLocationName(location, 1));
+            assert addressList != null;
+            Log.d("TAG", String.valueOf(addressList.size()));
             Address address = addressList.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -243,12 +224,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             double[] latLon = {address.getLatitude(),address.getLongitude()};
                             intent.putExtra("position",latLon);
 //                            MapsActivity.this.startActivityForResult(intent,101);
-                            startActivity(intent);
+                            startActivityForResult(intent,222);
 
                         }
                     })
                     .setNegativeButton("Sure" , null).show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+            }
+        },1);
+
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==222){
+            String received  = data.getStringExtra("selectedQr");
+            Toast.makeText(MapsActivity.this, " "+received, Toast.LENGTH_SHORT).show();
+            DocumentReference docRef = QrRun.collection("QR").document(received);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            QRGame selectedQr = new QRGame(document);
+                            LatLng selectedPosition = new LatLng(selectedQr.getLat(),selectedQr.getLon());
+                            preferredQrMarker = mMap.addMarker(new MarkerOptions()
+                                    .position(selectedPosition)
+                                    .title(String.valueOf(selectedQr.getPoints()))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                            images.put(preferredQrMarker, selectedQr.getPath());
+                            preferredQrMarker.showInfoWindow();
+                            markers.add(preferredQrMarker);
+                        }
+                    }
+
+                });
+        }
+    }
 }
