@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -32,11 +34,11 @@ public class ImagePopup extends AppCompatDialogFragment {
         void onDiscard();
     }
 
-    public static ImagePopup newInstance(String image) {
+    public static ImagePopup newInstance(QRGame qr) {
 
         Bundle args = new Bundle();
 
-        args.putString("image", image);
+        args.putSerializable("QR", qr);
 
         ImagePopup popup = new ImagePopup();
         popup.setArguments(args);
@@ -59,11 +61,11 @@ public class ImagePopup extends AppCompatDialogFragment {
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.image_popup, null);
 
-        String img = getArguments().getString("image");
+        QRGame qr = (QRGame) getArguments().getSerializable("QR");
         final long ONE_MEGABYTE = 1024 * 1024;
         imageView = view.findViewById(R.id.image_view);
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference pathReference = storageRef.child(img);
+        StorageReference pathReference = storageRef.child(qr.getPath());
         pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener((bytes) -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             imageView.setImageBitmap(bitmap);
@@ -79,11 +81,17 @@ public class ImagePopup extends AppCompatDialogFragment {
                         listener.onDiscard();
                     }
                 })
-                .setPositiveButton("", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Show QR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                        listener.onOkPressed();
+                        SharedPreferences prefs =  getContext().getSharedPreferences(
+                                "com.example.app", Context.MODE_PRIVATE); // Get the Shared preferences
+                        String usrName = prefs.getString("usrName", null);
+                        Intent intent = new Intent(getContext(), QrSummary.class);
+                        intent.putExtra("hexString", qr.getHexString());
+                        intent.putExtra("username", usrName);
+                        startActivity(intent);
+                        //listener.onOkPressed();
                     }
                 }).create();
     }
