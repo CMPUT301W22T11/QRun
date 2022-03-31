@@ -3,32 +3,47 @@
 package com.example.qrun;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.qrun.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, ImagePopup.OnFragmentInteractionListener {
@@ -40,14 +55,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HashMap<Marker, String> images = new HashMap<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     FirebaseFirestore QrRun;
+    Marker preferredQrMarker;
 
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         QrRun = FirebaseFirestore.getInstance();
-
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -111,6 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     if(samePointMarkerHandler(add)){
                                         add = new LatLng(qr.getLat() + (rand.nextInt(10)*0.01), qr.getLon() + (rand.nextInt(10) * 0.01));
                                     }
+
                                     Marker marker = mMap.addMarker(new MarkerOptions()
                                             .position(add)
                                             .title(String.valueOf(qr.getPoints()))
@@ -165,6 +180,75 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         return false;
+    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 101 && resultCode == RESULT_OK && data != null) {
+//
+//            if(data.hasExtra("selectedQr")) {
+//                String preferredQr = getIntent().getExtras().getString("selectedQr");
+//                DocumentReference docRef = QrRun.collection("QR").document(preferredQr);
+//                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            QRGame selectedQr = new QRGame(document);
+//                            LatLng selectedPosition = new LatLng(selectedQr.getLat(),selectedQr.getLon());
+//                            preferredQrMarker = mMap.addMarker(new MarkerOptions()
+//                                    .position(selectedPosition)
+//                                    .title(String.valueOf(selectedQr.getPoints()))
+//                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//                            images.put(preferredQrMarker, selectedQr.getPath());
+//                            markers.add(preferredQrMarker);
+//                        }
+//                    }
+//                });
+//
+//            }
+//        }
+//    }
+
+    /**
+     * move the camera to the location specified by user showing QRs nearby
+     * code source: https://www.javatpoint.com/android-google-map-search-location-using-geocodr
+     * @param view
+     * @author lucheng
+     */
+    public void searchLocation(View view) {
+        EditText locationSearch = (EditText) findViewById(R.id.location_text);
+        String location = locationSearch.getText().toString();
+        List<Address> addressList = null;
+
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address address = addressList.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
+            Toast.makeText(getApplicationContext(),address.getLatitude()+" "+address.getLongitude(),Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(MapsActivity.this)
+                    .setMessage("Stay for the view or go for the treasure hunt?")
+                    .setPositiveButton("GO!", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                            double[] latLon = {address.getLatitude(),address.getLongitude()};
+                            intent.putExtra("position",latLon);
+//                            MapsActivity.this.startActivityForResult(intent,101);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .setNegativeButton("Sure" , null).show();
+        }
     }
 
 }

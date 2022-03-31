@@ -6,4 +6,27 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsActivity" />
+    tools:context=".MapsActivity" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:layout_width="248dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_text"
+            android:layout_weight="0.5"
+            android:inputType="textPersonName"
+            android:hint="Search Location" />
+
+        <Button
+            android:onClick="searchLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Search" />
+
+    </LinearLayout>
+
+</fragment>
