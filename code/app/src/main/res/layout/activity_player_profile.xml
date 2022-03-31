@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/userNameTV"
-        android:layout_width="414dp"
+        android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="#2196F3"
         android:gravity="center"
