@@ -18,5 +18,10 @@
     <string name="comments">Comments:</string>
     <string name="delete_current_qr_code">Delete current Qr code</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string-array name="rank">
+        <item>Unique QR</item>
+        <item>Total Sum</item>
+        <item>Total Scanned</item>
+    </string-array>
 
 </resources>

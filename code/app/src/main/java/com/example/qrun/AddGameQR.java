@@ -205,7 +205,16 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                             else {
                                 storage.add(data, (isComplete) -> {
                                     if(isComplete) {
-
+                                        user.updateUser(qr.getUsername(), storage, (isSuccess) -> {
+                                            if(isSuccess) {
+                                                Intent intent = new Intent();
+                                                setResult(1, intent);
+                                                finish();
+                                            }
+                                            else {
+                                                ErrorFinish();
+                                            }
+                                        });
                                     }
                                     else {
                                         ErrorFinish();
@@ -225,22 +234,6 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         position = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
-
-    public String bitmapToString(Bitmap bitmap){
-        //The pictures uploaded by the user in the activity are converted into String for storage
-        String string;
-
-        if(bitmap!=null){
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] bytes = stream.toByteArray();// Convert to byte array
-            string= Base64.encodeToString(bytes,Base64.DEFAULT);
-            return string;
-        }
-        else{
-            return "";
-        }
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 

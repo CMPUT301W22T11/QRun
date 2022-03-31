@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,26 +12,32 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * This class is similar to the PlayerProfile, however this is meant for displaying user profile
  * after searching from user listing activity
  */
 public class UserProfileExternal extends AppCompatActivity {
-    String userName, actualUsername;
-    String email;
-    String phone;
-    String name;
-    TextView usernameTV;
-    TextView uniqueQRRankTV;
-    TextView totalNumQRTV;
-    TextView totalSumQRTV;
-    TextView nameTV;
-    TextView emailTV;
-    TextView telTV;
-    TextView streetAddressTV;
+    private String userName, actualUsername;
+    private String email;
+    private String phone;
+    private String name;
+    private TextView usernameTV;
+    private TextView uniqueQRRankTV;
+    private TextView totalNumQRTV;
+    private TextView totalSumQRTV;
+    private TextView totalNumRank, maxQRDisp, totalSumRank;
+    private TextView nameTV;
+    private TextView emailTV;
+    private TextView telTV;
+    private ImageView qrCodeImage;
+    private long rankQR = 1, rankSum = 1, rankScanned = 1;
     ListView QRList;
     ArrayAdapter<QRGame> qrAdapter;
     ArrayList<QRGame> qrDataList;
@@ -48,40 +55,64 @@ public class UserProfileExternal extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
         userStorage.get(userName, (data)->{
-            if(data!=null){
-                name = (String) data.get("name");
-                Log.d("ffwfwf",name);
-                email = (String) data.get("email");
-                phone = (String) data.get("phone");
-                usernameTV.setText(userName);
-                nameTV.setText(name);
-                emailTV.setText(email);
-                telTV.setText(phone);
-                long totalPoints = 0;
-                long totalScanned = 0;
-                Object temp = data.get("totalpoints");
-                if(temp != null) {
-                    totalPoints = (long)temp;
-                }
-                temp = data.get("totalscannedqr");
-                if(temp != null) {
-                    totalScanned = (long)temp;
-                }
-                totalNumQRTV.setText("Total # of QR codes Ranking: "+String.valueOf(totalScanned));
-                totalSumQRTV.setText("Total Sum of QR codes Ranking: "+String.valueOf(totalPoints));
+            if(data != null){
+                User user = new User(userName, data);
+                nameTV.setText(user.getName());
+                emailTV.setText(user.getEmail());
+                telTV.setText(user.getPhoneNumber());
+                maxQRDisp.setText("Unique QR max: " + String.valueOf(user.getUniqueqr()));
+                totalNumQRTV.setText("Total # of QR codes: "+String.valueOf(user.getTotalscannedqr()));
+                totalSumQRTV.setText("Total Sum of QR codes: "+String.valueOf(user.getTotalsum()));
+                userStorage.getCol().get().addOnCompleteListener((task) -> {
+                    if(task.isSuccessful()) {
+                        QuerySnapshot snapshot = task.getResult();
+                        ArrayList<User> dataRanking = new ArrayList<>();
+                        if(snapshot != null) {
+                            for (QueryDocumentSnapshot document : snapshot) {
+                                dataRanking.add(new User(document));
+                            }
+                        }
+                        Collections.sort(dataRanking, (f1, f2) -> Long.compare(f2.getTotalscannedqr(), f1.getTotalscannedqr()));
+                        for(User u : dataRanking) {
+                            if(u.getUsername().compareTo(userName) == 0) {
+                                break;
+                            }
+                            rankScanned++;
+                        }
+                        Collections.sort(dataRanking, (f1, f2) -> Long.compare(f2.getTotalsum(), f1.getTotalsum()));
+                        for(User u : dataRanking) {
+                            if(u.getUsername().compareTo(userName) == 0) {
+                                break;
+                            }
+                            rankSum++;
+                        }
+                        Collections.sort(dataRanking, (f1, f2) -> Long.compare(f2.getUniqueqr(), f1.getUniqueqr()));
+                        for(User u : dataRanking) {
+                            if(u.getUsername().compareTo(userName) == 0) {
+                                break;
+                            }
+                            rankQR++;
+                        }
+                        uniqueQRRankTV.setText("Unique QR Ranking: "+String.valueOf(rankQR));
+                        totalNumRank.setText("Total Scanned Ranking: "+ String.valueOf(rankScanned));
+                        totalSumRank.setText("Total Sum Ranking: " + String.valueOf(rankSum));
+                    }
+                });
             }
-        }
-        );
+        });
     }
     private void initTV (){
         usernameTV = findViewById(R.id.userNameTV);
-        uniqueQRRankTV = findViewById(R.id.QRCodeRank) ;
-        totalNumQRTV = findViewById(R.id.numQRCode) ;
-        totalSumQRTV = findViewById(R.id.totalSumQR) ;
+        maxQRDisp = findViewById(R.id.QRCodeRank);
+        totalNumQRTV = findViewById(R.id.numQRCode);
+        totalSumQRTV = findViewById(R.id.totalSumQR);
+        totalSumRank = findViewById(R.id.totalSumQR2);
+        totalNumRank = findViewById(R.id.numQRCode2);
+        uniqueQRRankTV = findViewById(R.id.QRCodeRank2);
         nameTV = findViewById(R.id.nameTV);
         emailTV= findViewById(R.id.emailTV);
         telTV= findViewById(R.id.teleTV);
-        streetAddressTV= findViewById(R.id.streetAddressTV);
+//        streetAddressTV= findViewById(R.id.streetAddressTV);
         nameTV.setText("Gewgwegwegweg");
         QRList = findViewById(R.id.qrlist);
         qrDataList = new ArrayList<>();

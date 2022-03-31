@@ -9,17 +9,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -35,6 +42,8 @@ public class UserListingActivity extends AppCompatActivity {
     private String username;
     private FloatingActionButton camBut;
     private Context ctx;
+    private Spinner choosingStuff;
+    private int choose;
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -58,13 +67,24 @@ public class UserListingActivity extends AppCompatActivity {
                 }
             }
     );
-    private void getData(QuerySnapshot queryDocumentSnapshots) {
+    private void getData(QuerySnapshot queryDocumentSnapshots, int ranking) {
         userDataList.clear();
         if(queryDocumentSnapshots != null) {
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 if(document.getId() != username) {
                     userDataList.add(new User(document));
                 }
+            }
+            switch(ranking) {
+                case 0:
+                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getTotalscannedqr(), f1.getTotalscannedqr()));
+                    break;
+                case 1:
+                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getTotalsum(), f1.getTotalsum()));
+                    break;
+                case 2:
+                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getUniqueqr(), f1.getUniqueqr()));
+                    break;
             }
             userAdapter.notifyDataSetChanged();
         }
@@ -78,6 +98,27 @@ public class UserListingActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.searchplayer);
         userList = findViewById(R.id.playerlist);
         camBut = findViewById(R.id.camera_button);
+        choosingStuff = findViewById(R.id.rankingId);
+        ArrayAdapter<CharSequence> choosingAdapter = ArrayAdapter.createFromResource(this,
+                R.array.rank, android.R.layout.simple_spinner_item);
+        choosingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        choosingStuff.setAdapter(choosingAdapter);
+        choosingStuff.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View v, int position,
+                                       long id) {
+                // TODO Auto-generated method stub
+                choose = position;
+                storage.getCol().get().addOnCompleteListener((task) -> {
+                    getData(task.getResult(), position);
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
         userDataList = new ArrayList<>();
         userAdapter = new UserCustomList(this, userDataList);
         userList.setAdapter(userAdapter);
@@ -87,16 +128,12 @@ public class UserListingActivity extends AppCompatActivity {
         }
 
         storage = new UserStorage(FirebaseFirestore.getInstance());
-        storage.getCol().addSnapshotListener((queryDocumentSnapshots, error) ->
-        {
-            getData(queryDocumentSnapshots);
-        });
         // if search button is clicked
         searchbut.setOnClickListener((l) -> {
              String userName = searchBar.getText().toString();
              if(userName.compareTo("") == 0) {
-                 storage.getCol().addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    getData(queryDocumentSnapshots);
+                 storage.getCol().get().addOnCompleteListener((task) -> {
+                    getData(task.getResult(), choose);
                  });
              }
              else {
