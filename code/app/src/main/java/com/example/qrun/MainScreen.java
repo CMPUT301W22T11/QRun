@@ -29,6 +29,7 @@ import java.util.Map;
  * Main Screen after login
  */
 public class MainScreen extends AppCompatActivity {
+
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -46,6 +47,7 @@ public class MainScreen extends AppCompatActivity {
                 }
             }
     );
+
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
@@ -83,9 +85,21 @@ public class MainScreen extends AppCompatActivity {
         });
     }
 
+    boolean isOwner;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        UserStorage userStorage = new UserStorage(db);
+        userStorage.get(userName, (data)-> {
+            if (data != null) {
+                isOwner = (boolean) data.get("isOwner");
+            }
+        });
+        if (isOwner) {
+            MenuItem admin = menu.findItem(R.id.adminPerms);
+            admin.setVisible(true);
+        }
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -110,6 +124,9 @@ public class MainScreen extends AppCompatActivity {
                 Intent intent = new Intent(this, QRGameListActivity.class);
                 intent.putExtra("userName", userName);
                 startActivity(intent);
+                break;
+            }
+            case R.id.adminPerms: {
                 break;
             }
         }

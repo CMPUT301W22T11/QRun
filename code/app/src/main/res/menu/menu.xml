@@ -23,4 +23,11 @@
         android:title="Profile"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/adminPerms"
+
+        android:title="Admin"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>
