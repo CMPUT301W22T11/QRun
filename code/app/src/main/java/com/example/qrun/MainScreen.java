@@ -143,4 +143,14 @@ public class MainScreen extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void testCompression(View view){
+        Intent intent = new Intent(this, ImageCompressionActivity.class);
+        startActivity(intent);
+    }
+    public void testOutput(View view){
+        CompressionValStore compressionValue = CompressionValStore.getInstance();
+
+        Log.v("xx",String.valueOf(compressionValue.getValue()));
+
+    }
 }

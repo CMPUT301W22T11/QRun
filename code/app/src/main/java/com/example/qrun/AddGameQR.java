@@ -101,6 +101,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         setContentView(R.layout.activity_add_game_qr);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,this);
         ctx = this;
         cancelbut = findViewById(R.id.cancelbutton_id);
         addbut = findViewById(R.id.addbutton_id);
@@ -178,7 +179,8 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                                 StorageReference ref = FirebaseStorage.getInstance().getReference();
                                 StorageReference imagesRef = ref.child(id + ".jpg");
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                                CompressionValStore compressionValue = CompressionValStore.getInstance();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100-compressionValue.getValue(), baos);
                                 byte[] dataImg = baos.toByteArray();
                                 UploadTask uploadTask = imagesRef.putBytes(dataImg);
                                 uploadTask.addOnCompleteListener((l) -> {
