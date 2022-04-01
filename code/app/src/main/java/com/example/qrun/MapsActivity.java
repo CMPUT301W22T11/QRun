@@ -194,7 +194,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * move the camera to the location specified by user showing QRs nearby
      * code source: https://www.javatpoint.com/android-google-map-search-location-using-geocodr
      * @param view
-     * @author lucheng
      */
     public void searchLocation(View view) {
         String location = locationSearch.getText().toString();
