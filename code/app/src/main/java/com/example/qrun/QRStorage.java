@@ -57,11 +57,20 @@ public class QRStorage extends Storage{
                             UserStorage storage = new UserStorage(db);
 
                             if(path != null) {
-                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                                StorageReference imgRef = storageRef.child((String) path);
-                                imgRef.delete().addOnCompleteListener((l) -> {
+                                String actualPath = (String)path;
+                                if(actualPath.length() != 0) {
+                                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                    StorageReference imgRef = storageRef.child((String) path);
+                                    imgRef.delete().addOnCompleteListener((l) -> {
+                                        storage.updateUser(username, temp, comp);
+                                    });
+                                }
+                                else {
                                     storage.updateUser(username, temp, comp);
-                                });
+                                }
+                            }
+                            else {
+                                storage.updateUser(username, temp, comp);
                             }
                         }
                     })
@@ -72,6 +81,9 @@ public class QRStorage extends Storage{
                             comp.addFin(false);
                         }
                     });
+                }
+                else {
+                    comp.addFin(false);
                 }
         });
     }

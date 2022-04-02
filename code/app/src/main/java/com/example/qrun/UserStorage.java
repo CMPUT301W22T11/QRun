@@ -2,6 +2,7 @@ package com.example.qrun;
 
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -10,17 +11,36 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
 
 /**
  * This is the Firestore wrapper for the User Database
  */
 public class UserStorage extends Storage{
+    public interface getSortedArray<T> {
+        void getData(ArrayList<T> data);
+    }
     /**
      * Initialize the User Storage
      * @param db
      */
     public UserStorage(FirebaseFirestore db) {
         super(db,"User");
+    }
+    public void sortBy(String sortField, Query.Direction dir, @NonNull getSortedArray<User> comp){
+        ArrayList<User> list = new ArrayList<User>();
+        collectionReference.orderBy(sortField, dir).get().addOnCompleteListener((task) -> {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        list.add(new User(document));
+                    }
+                    comp.getData(list);
+                } else {
+                    Log.d("Storage get()", "get failed with ", task.getException());
+                    comp.getData(null);
+                }
+        });
     }
     public void updateUser(@NonNull String username, @NonNull QRStorage qrStorage, @NonNull StoreOnComplete fn) {
         this.get(username, (userData) -> {

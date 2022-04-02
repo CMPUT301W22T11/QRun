@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -45,7 +46,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     // if result is 1, then update the list
-                    if(result.getResultCode() == 1) {
+                    if (result.getResultCode() == 1) {
                         Intent intent = result.getData();
                         String rawQR = (String) intent.getSerializableExtra("QR");
                         qr = new QRGame(rawQR, username, lat, lon, path);
@@ -69,10 +70,9 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                         Log.d("QR Locations", String.valueOf(qr.getLat()) + " " + String.valueOf(qr.getLon()));
                         Log.d("----------------------------------------------------------------------------------------------------------------\n", qr.getPath());
-                        if(qr != null) {
+                        if (qr != null) {
                             addQR(qr, imageBitmap);
-                        }
-                        else {
+                        } else {
                             ErrorFinish();
                         }
 
@@ -94,6 +94,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
     private LocationManager locationManager;
     LatLng position;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +110,12 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         hashId = findViewById(R.id.hashholder);
         pointsId = findViewById(R.id.pointholder);
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             username = extras.getString("userName");
         }
         cancelbut.setOnClickListener((l) -> {
             Intent intent = new Intent();
-            setResult(2, intent);
+            setResult(3, intent);
             finish();
         });
         scanbut.setOnClickListener((l) -> {
@@ -122,13 +123,11 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
             ac.launch(intent);
         });
         addbut.setOnClickListener((l) -> {
-
             new MapPointPopup().newInstance().show(getSupportFragmentManager(), "Map");
-
-
         });
 
     }
+
     private void ErrorFinish() {
         Intent intent = new Intent();
         setResult(2, intent);
@@ -148,7 +147,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
     public void onDiscard() {
         qr.setLat(null);
         qr.setLon(null);
-//        qr.setPath(null);
+        qr.setPath(null);
         if(qr != null) {
             addQR(qr, null);
         }
@@ -207,7 +206,16 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                             else {
                                 storage.add(data, (isComplete) -> {
                                     if(isComplete) {
-
+                                        user.updateUser(qr.getUsername(), storage, (isSuccess) -> {
+                                            if(isSuccess) {
+                                                Intent intent = new Intent();
+                                                setResult(1, intent);
+                                                finish();
+                                            }
+                                            else {
+                                                ErrorFinish();
+                                            }
+                                        });
                                     }
                                     else {
                                         ErrorFinish();
@@ -227,22 +235,6 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         position = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
-
-    public String bitmapToString(Bitmap bitmap){
-        //The pictures uploaded by the user in the activity are converted into String for storage
-        String string;
-
-        if(bitmap!=null){
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] bytes = stream.toByteArray();// Convert to byte array
-            string= Base64.encodeToString(bytes,Base64.DEFAULT);
-            return string;
-        }
-        else{
-            return "";
-        }
-    }
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
 
