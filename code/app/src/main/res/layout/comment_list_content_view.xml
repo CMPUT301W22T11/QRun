@@ -10,16 +10,17 @@
         android:id="@+id/uid_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="2015dp"
         android:text="User"
-        android:textSize="22sp">
+        android:textSize="15sp">
     </TextView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/comment_text"
-        android:textSize="22sp"
+        android:textSize="15sp"
+        android:maxLength="12"
         android:layout_marginLeft="20dp"
         android:text="Comment">
     </TextView>

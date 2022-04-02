@@ -79,8 +79,8 @@ public class ScanningActivity extends AppCompatActivity {
 //        scanMode = (int) getIntent().getIntExtra(MainActivity.SCAN_MODE_KEY, SCAN_MODE_POINTS);
 
         scannerView = (CodeScannerView) findViewById(R.id.scanner_view);
-        codeText = findViewById(R.id.code_text);
-        qrImage = findViewById(R.id.qr_code);
+//        codeText = findViewById(R.id.code_text);
+//        qrImage = findViewById(R.id.qr_code);
         codeScanner = new CodeScanner(this, scannerView);
         codeScanner.setCamera(CodeScanner.CAMERA_BACK);
         codeScanner.setFormats(CodeScanner.ALL_FORMATS);

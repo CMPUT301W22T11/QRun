@@ -157,7 +157,8 @@ public class UserListingActivity extends AppCompatActivity {
         userList.setOnItemClickListener((adapter, view, i, l) -> {
             Intent intent = new Intent(this, UserProfileExternal.class);
             intent.putExtra("userName", username);
-            intent.putExtra("externalUsername", userDataList.get(i).getUsername());
+            String userName = userDataList.get(i).getUsername();
+            intent.putExtra("externalUsername", userName);
             startActivity(intent);
         });
         camBut.setOnClickListener((l) -> {

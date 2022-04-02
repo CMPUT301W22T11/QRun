@@ -115,7 +115,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         }
         cancelbut.setOnClickListener((l) -> {
             Intent intent = new Intent();
-            setResult(2, intent);
+            setResult(3, intent);
             finish();
         });
         scanbut.setOnClickListener((l) -> {

@@ -86,6 +86,7 @@ public class UserProfileExternal extends AppCompatActivity {
         });
         userStorage.get(userName, (data)->{
             if(data != null){
+                usernameTV.setText(userName);
                 user = new User(userName, data);
                 nameTV.setText(user.getName());
                 emailTV.setText(user.getEmail());
