@@ -5,9 +5,13 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +33,8 @@ import java.util.Map;
  * Main Screen after login
  */
 public class MainScreen extends AppCompatActivity {
+    private final static int SUCCESS = 0;
+    SharedPreferences prefs;
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -36,7 +42,7 @@ public class MainScreen extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     // if result is 1, then update the list
                     if(result.getResultCode() == 1) {
-                        Log.d("add QR()", "ADD QR Successfully");
+                        Log.d("add QR()", "Add QR Successfully");
                         Toast.makeText(ctx, "ADD QR Successfully", Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -46,6 +52,17 @@ public class MainScreen extends AppCompatActivity {
                 }
             }
     );
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ){
+            //Start your code
+        } else {
+            //Show snackbar
+        }
+    }
     ImageButton cameraBut;
     Button mapsButton;
     String userName;
@@ -53,22 +70,34 @@ public class MainScreen extends AppCompatActivity {
     Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION}, SUCCESS);
         setContentView(R.layout.activity_main_screen);
         ctx = this;
         qrCodeImage =  (ImageView) findViewById(R.id.qrCodeImage);
         Bundle extras = getIntent().getExtras();
         cameraBut = findViewById(R.id.cameraButton);
-        if(extras != null){
-            userName = extras.getString("userName");
-            Log.d("xx",userName);
-        }
+        prefs = getApplicationContext().getSharedPreferences(
+                "com.example.app", Context.MODE_PRIVATE); // Get the Shared preferences
+        userName = prefs.getString("usrName", null);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
         QRGenerator qrCodeGen = new QRGenerator();
         Bitmap qrGen= qrCodeGen.generateQRBitmap(userName,this);
         qrCodeImage=(ImageView) findViewById(R.id.qrCodeImage);
         qrCodeImage.setImageBitmap(qrGen);
+
+        mapsButton = findViewById(R.id.mapButton);
+
+        mapsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -82,6 +111,8 @@ public class MainScreen extends AppCompatActivity {
             ac.launch(intent);
         });
     }
+    @Override
+    public void onBackPressed() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,6 +141,13 @@ public class MainScreen extends AppCompatActivity {
                 Intent intent = new Intent(this, QRGameListActivity.class);
                 intent.putExtra("userName", userName);
                 startActivity(intent);
+                break;
+            }
+            case R.id.logoutBut: {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove("usrName");
+                editor.commit();
+                finish();
                 break;
             }
         }

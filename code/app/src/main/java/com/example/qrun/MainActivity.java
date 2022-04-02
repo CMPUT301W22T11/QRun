@@ -11,23 +11,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.qrun.Fragment.SignupFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.File;
 
 /**
  * The Screen Before Login/Signup
  */
 public class MainActivity extends AppCompatActivity implements SignupFragment.OnFragmentInteractionListener
 {
+
     /**
      * Login based on its username
      * @param username
@@ -68,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
     private Context ctx;
     private SharedPreferences prefs;
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Signup = findViewById(R.id.signup_button);

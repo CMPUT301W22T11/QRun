@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 
@@ -35,7 +37,8 @@ public class QRStorage extends Storage{
      * @param qr the qr that is going to be deleted
      * @param comp lambda expression to check if QR has been successfully deleted or not
      */
-    public void delete(QRGame qr, @NonNull StoreOnComplete comp) {
+    public void delete(@NonNull QRGame qr, @NonNull StoreOnComplete comp) {
+        QRStorage temp = this;
         String username = qr.getUsername();
         String hexString = qr.getHexString();
         this.collectionReference.whereEqualTo("username", username)
@@ -44,29 +47,31 @@ public class QRStorage extends Storage{
                 if(task.isSuccessful()) {
                     long point = qr.getPoints();
                     QuerySnapshot doc = task.getResult();
-                    this.collectionReference.document(doc.getDocuments().get(0).getId()).delete()
+                    Object path = doc.getDocuments().get(0).get("PicPath");
+                    this.collectionReference.document(doc.getDocuments().get(0).getId())
+                            .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("QR Delete", "DocumentSnapshot successfully deleted!");
                             UserStorage storage = new UserStorage(db);
-                            storage.get(username, data -> {
-                                if(data != null) {
-                                    long totalpoints = (long)data.get("totalpoints");
-                                    long scanned = (long)data.get("totalscannedqr");
-                                    totalpoints -= point;
-                                    scanned--;
-                                    data.put("totalpoints", totalpoints);
-                                    data.put("totalscannedqr", scanned);
-                                    storage.update(username, data, isSuccess -> {
-                                        if(isSuccess) comp.addFin(true);
-                                        else comp.addFin(false);
+
+                            if(path != null) {
+                                String actualPath = (String)path;
+                                if(actualPath.length() != 0) {
+                                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                    StorageReference imgRef = storageRef.child((String) path);
+                                    imgRef.delete().addOnCompleteListener((l) -> {
+                                        storage.updateUser(username, temp, comp);
                                     });
                                 }
                                 else {
-                                    comp.addFin(false);
+                                    storage.updateUser(username, temp, comp);
                                 }
-                            });
+                            }
+                            else {
+                                storage.updateUser(username, temp, comp);
+                            }
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -76,6 +81,9 @@ public class QRStorage extends Storage{
                             comp.addFin(false);
                         }
                     });
+                }
+                else {
+                    comp.addFin(false);
                 }
         });
     }
