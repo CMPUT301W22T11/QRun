@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.example.qrun.Fragment.*;
 
@@ -22,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -62,15 +64,45 @@ CommentViewFragment.OnFragmentInteractionListener {
         binding.sharedQrList.setAdapter(sharedQrAdapter);
         commentContentList = new ArrayList<>();
         commentAdapter = new CustomComment(this, commentContentList);
+        new UserStorage(FirebaseFirestore.getInstance()).get(username, (data) ->{
+            if(data != null) {
+                Object temp = data.get("isOwner");
+                if(temp != null) {
+                    boolean isOwner = (boolean) temp;
+                    if(isOwner) {
+                        binding.deleteAdminQr.setVisibility(View.VISIBLE);
+                        binding.deleteAdminQr.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                AdminController controller = new AdminController();
+                                controller.deleteQRBatch(hexString, (isSuccess) -> {
+                                    if(isSuccess) {
+                                        Toast.makeText(ctx, "QR batch Deletion Successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                    else {
+                                        Toast.makeText(ctx, "QR batch Deletion Failed", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
         binding.commentList.setAdapter(commentAdapter);
         QRStorage QrRun = new QRStorage(FirebaseFirestore.getInstance());
-        QrRun.getCol().whereEqualTo("hexString", hexString).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            sharedUsers.clear();
-                            for(DocumentSnapshot document : task.getResult()){
+        QrRun.getCol().whereEqualTo("hexString", hexString)
+                .addSnapshotListener((task, error) -> {
+                        if (error != null) {
+                            Log.w("get()", "Listen failed.", error);
+                            return;
+                        }
+                        sharedUsers.clear();
+                        if(task != null){
+
+                            for(DocumentSnapshot document : task){
                                 String points = "Points: " + String.valueOf((long)document.getData().get("points"));
                                 binding.points.setText(points);
                                 if(document.exists()){
@@ -82,13 +114,11 @@ CommentViewFragment.OnFragmentInteractionListener {
                                     Log.d("Storage get()", "No such document");
                                 }
                             }
-                            sharedQrAdapter.notifyDataSetChanged();
-                        } else {
-                            Log.d("Storage get()", "get failed with", task.getException());
                         }
-                    }
+                        sharedQrAdapter.notifyDataSetChanged();
                 });
         commentStorage.getCol().whereEqualTo("qrCommented",hexString)
+                .orderBy("commentDate", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() { //add a snapshot tp query all comments related to current QRid
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -125,7 +155,6 @@ CommentViewFragment.OnFragmentInteractionListener {
                 //send current uid and qid into addCommentFragment
                 addComment.setArguments(bundle);
                 addComment.show(getSupportFragmentManager(),"add_comment");
-
             }
         });
         QRStorage qrStorage = new QRStorage(FirebaseFirestore.getInstance());
@@ -150,7 +179,7 @@ CommentViewFragment.OnFragmentInteractionListener {
 
     }
     public void onOkPressed(Comment newComment) {
-        commentContentList.add(newComment);                             //add new comment object into local data list
+        commentContentList.add(newComment);  //add new comment object into local data list
         HashMap<String, Object> comments = new HashMap<>();
         comments.put("commentDate", newComment.getDate());
         comments.put("qrCommented", newComment.getQid());
