@@ -254,7 +254,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     .position(selectedPosition)
                                     .title(String.valueOf(selectedQr.getPoints()))
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                            images.put(preferredQrMarker, selectedQr.getPath());
+                            images.put(preferredQrMarker, selectedQr);
                             preferredQrMarker.showInfoWindow();
                             markers.add(preferredQrMarker);
                         }
