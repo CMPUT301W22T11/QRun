@@ -25,14 +25,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/Location"
-                android:layout_margin="5dp"
-                android:text="Location">
-            </TextView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="Also owned by:"
                 android:layout_margin="5dp"
                 android:id="@+id/shared_qrs">
@@ -69,15 +61,24 @@
             android:contentDescription="Add a new comment" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/delete_qr"
+            android:id="@+id/delete_admin_qr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="16dp"
+            android:contentDescription="Delete current qr code"
             android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_menu_delete"
-            android:contentDescription="Delete current qr code" />
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/deleteQr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_margin="16dp"
+            android:contentDescription="Delete current qr code"
+            android:visibility="gone"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

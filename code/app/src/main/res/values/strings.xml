@@ -23,5 +23,9 @@
         <item>Total Sum</item>
         <item>Total Scanned</item>
     </string-array>
+    <string-array name="isAdmin">
+        <item>User</item>
+        <item>Admin</item>
+    </string-array>
 
 </resources>

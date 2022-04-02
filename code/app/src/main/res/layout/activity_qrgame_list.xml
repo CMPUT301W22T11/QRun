@@ -18,6 +18,12 @@
             android:layout_height="wrap_content"
             android:text="sort" />
 
+        <Spinner
+            android:id="@+id/adminChoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
         <ListView
             android:id="@+id/qrgamelist"
             android:layout_width="match_parent"

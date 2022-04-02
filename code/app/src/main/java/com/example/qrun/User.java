@@ -13,9 +13,6 @@ import java.util.Map;
  * This is the main User class
  */
 public class User {
-    private ArrayList<QRGame> qrStore = new ArrayList<>() ;
-    private QRGame qrGameStatus;
-    private Location location;
     private String username;
     private String email, name, phoneNumber;
     private long totalscannedqr = 0, totalsum = 0, uniqueqr = 0;
@@ -44,8 +41,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public User(Location location, String username){
-        this.location = location;
+    public User(String username){
         this.username = username;
     }
 
@@ -100,36 +96,6 @@ public class User {
         if(temp != null) {
             uniqueqr = (long)temp;
         }
-    }
-    public void addQR(QRGame qr){
-        qrStore.add(qr);
-    }
-    public ArrayList<QRGame> getStoredQr(){
-        return qrStore;
-    }
-    public void removeQR(QRGame qr){
-        qrStore.remove(qr);
-    }
-    public int getTotalQR(){
-        return qrStore.size();
-    }
-    public User getUser(){
-        return this;
-    }
-    public void setQrGameStatus(QRGame qr){
-        qrGameStatus = qr;
-    }
-    public QRGame getQRGameStatus(){
-        return qrGameStatus;
-    }
-
-
-    public Location getLocation(){
-        return location;
-    }
-
-    public void setLocation(Location location){
-        this.location = location;
     }
 
     public String getUsername() {

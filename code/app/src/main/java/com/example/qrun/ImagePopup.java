@@ -87,19 +87,4 @@ public class ImagePopup extends AppCompatDialogFragment {
                     }
                 }).create();
     }
-
-
-    public Bitmap stringToBitmap(String string){
-        //String type in database converted to Bitmap
-        Bitmap bitmap;
-
-        if(string!=null){
-            byte[] bytes= Base64.decode(string,Base64.DEFAULT);
-            bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-            return bitmap;
-        }
-        else {
-            return null;
-        }
-    }
 }

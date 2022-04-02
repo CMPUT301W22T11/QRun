@@ -19,6 +19,7 @@ import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,6 +45,7 @@ public class UserListingActivity extends AppCompatActivity {
     private Context ctx;
     private Spinner choosingStuff;
     private int choose;
+    private ListenerRegistration listener;
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -109,8 +111,10 @@ public class UserListingActivity extends AppCompatActivity {
                                        long id) {
                 // TODO Auto-generated method stub
                 choose = position;
-                storage.getCol().get().addOnCompleteListener((task) -> {
-                    getData(task.getResult(), position);
+                if(listener != null) listener.remove();
+                listener = storage.getCol().addSnapshotListener((task, error) -> {
+                    if(error != null) return;
+                    getData(task, position);
                 });
             }
 
@@ -132,15 +136,19 @@ public class UserListingActivity extends AppCompatActivity {
         searchbut.setOnClickListener((l) -> {
              String userName = searchBar.getText().toString();
              if(userName.compareTo("") == 0) {
-                 storage.getCol().get().addOnCompleteListener((task) -> {
-                    getData(task.getResult(), choose);
+                 if(listener != null) listener.remove();
+                 listener = storage.getCol().addSnapshotListener((task, error) -> {
+                     if(error != null) return;
+                    getData(task, choose);
                  });
              }
              else {
-                 storage.getCol().document(userName).get().addOnCompleteListener((task) -> {
+                 if(listener != null) listener.remove();
+                 storage.getCol().document(userName).addSnapshotListener((task, error) -> {
+                     if(error != null) return;
                      userDataList.clear();
-                     if(task.isSuccessful()) {
-                         userDataList.add(new User(task.getResult()));
+                     if(task != null) {
+                         userDataList.add(new User(task));
                      }
                      userAdapter.notifyDataSetChanged();
                  });

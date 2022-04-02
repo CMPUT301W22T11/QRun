@@ -1,15 +1,19 @@
 package com.example.qrun;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,9 +29,6 @@ import java.util.Comparator;
  */
 public class UserProfileExternal extends AppCompatActivity {
     private String userName, actualUsername;
-    private String email;
-    private String phone;
-    private String name;
     private TextView usernameTV;
     private TextView uniqueQRRankTV;
     private TextView totalNumQRTV;
@@ -38,14 +39,17 @@ public class UserProfileExternal extends AppCompatActivity {
     private TextView telTV;
     private ImageView qrCodeImage;
     private long rankQR = 1, rankSum = 1, rankScanned = 1;
+    private FloatingActionButton deleteAdmin;
     ListView QRList;
+    User user;
+    private Context ctx;
     ArrayAdapter<QRGame> qrAdapter;
     ArrayList<QRGame> qrDataList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_profile_external);
-
+        ctx = this;
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             userName = extras.getString("externalUsername");
@@ -54,18 +58,44 @@ public class UserProfileExternal extends AppCompatActivity {
         initTV();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage userStorage = new UserStorage(db);
+        userStorage.get(actualUsername, (data) -> {
+            if(data != null) {
+                Object temp = data.get("isOwner");
+                if(temp != null) {
+                    boolean isOwner = (boolean) temp;
+                    if(isOwner) {
+                        deleteAdmin.setVisibility(View.VISIBLE);
+                        deleteAdmin.setOnClickListener((l) ->{
+                            AdminController controller = new AdminController();
+                            if(user != null) {
+                                controller.deleteUser(user, isSuccess -> {
+                                    if(isSuccess) {
+                                        Toast.makeText(ctx, "User Deletion Successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                    else {
+                                        Toast.makeText(ctx, "User Deletion Failed", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
         userStorage.get(userName, (data)->{
             if(data != null){
-                User user = new User(userName, data);
+                user = new User(userName, data);
                 nameTV.setText(user.getName());
                 emailTV.setText(user.getEmail());
                 telTV.setText(user.getPhoneNumber());
                 maxQRDisp.setText("Unique QR max: " + String.valueOf(user.getUniqueqr()));
                 totalNumQRTV.setText("Total # of QR codes: "+String.valueOf(user.getTotalscannedqr()));
                 totalSumQRTV.setText("Total Sum of QR codes: "+String.valueOf(user.getTotalsum()));
-                userStorage.getCol().get().addOnCompleteListener((task) -> {
-                    if(task.isSuccessful()) {
-                        QuerySnapshot snapshot = task.getResult();
+                userStorage.getCol().addSnapshotListener((task, error) -> {
+                    if(task != null) {
+                        QuerySnapshot snapshot = task;
                         ArrayList<User> dataRanking = new ArrayList<>();
                         if(snapshot != null) {
                             for (QueryDocumentSnapshot document : snapshot) {
@@ -93,15 +123,15 @@ public class UserProfileExternal extends AppCompatActivity {
                             }
                             rankQR++;
                         }
-                        uniqueQRRankTV.setText("Unique QR Ranking: "+String.valueOf(rankQR));
-                        totalNumRank.setText("Total Scanned Ranking: "+ String.valueOf(rankScanned));
-                        totalSumRank.setText("Total Sum Ranking: " + String.valueOf(rankSum));
+                        uniqueQRRankTV.setText("Unique QR Rank: "+ String.valueOf(rankQR));
+                        totalNumRank.setText("Total Scanned Rank: "+ String.valueOf(rankScanned));
+                        totalSumRank.setText("Total Sum Rank: " + String.valueOf(rankSum));
                     }
                 });
             }
         });
     }
-    private void initTV (){
+    private void initTV(){
         usernameTV = findViewById(R.id.userNameTV);
         maxQRDisp = findViewById(R.id.QRCodeRank);
         totalNumQRTV = findViewById(R.id.numQRCode);
@@ -112,6 +142,7 @@ public class UserProfileExternal extends AppCompatActivity {
         nameTV = findViewById(R.id.nameTV);
         emailTV= findViewById(R.id.emailTV);
         telTV= findViewById(R.id.teleTV);
+        deleteAdmin = findViewById(R.id.deleteUserAdmin);
 //        streetAddressTV= findViewById(R.id.streetAddressTV);
         nameTV.setText("Gewgwegwegweg");
         QRList = findViewById(R.id.qrlist);

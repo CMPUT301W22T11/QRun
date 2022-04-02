@@ -110,6 +110,8 @@ public class MainScreen extends AppCompatActivity {
             ac.launch(intent);
         });
     }
+    @Override
+    public void onBackPressed() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

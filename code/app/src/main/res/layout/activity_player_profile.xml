@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/userNameTV"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:background="#2196F3"
         android:gravity="center"
         android:text="Username"
@@ -29,81 +29,84 @@
         app:layout_constraintTop_toBottomOf="@+id/qrCodeIV" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameTV">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/QRCodeRank2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:text="Unique QR Ranking"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/QRCodeRank2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:text="Unique QR Ranking" />
-
-            <TextView
-                android:id="@+id/totalSumQR2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Total Sum Ranking" />
-
-            <TextView
-                android:id="@+id/numQRCode2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Total Scanned QR" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/totalSumQR2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:text="Total Sum Ranking"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/QRCodeRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:text="Unique QR code Ranking" />
+        <TextView
+            android:id="@+id/numQRCode2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Total Scanned QR"
+            android:textSize="15sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/totalSumQR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Total Sum of QR codes Ranking" />
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userNameTV">
 
-            <TextView
-                android:id="@+id/numQRCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Total # of QR codes Ranking" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/QRCodeRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Unique QR code Ranking"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/totalSumQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Total Sum of QR codes Ranking"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/numQRCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Total # of QR codes Ranking"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <View
         android:id="@+id/divider"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,9 +114,9 @@
 
     <View
         android:id="@+id/divider3"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,9 +124,9 @@
 
     <View
         android:id="@+id/divider4"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,12 +134,12 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="31dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:text="Name: "
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
@@ -148,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Name"
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.183"
@@ -162,7 +165,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Email:"
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
@@ -174,7 +177,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:text="Email"
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.162"
@@ -184,12 +187,12 @@
 
     <TextView
         android:id="@+id/textView15"
-        android:layout_width="34dp"
-        android:layout_height="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="3dp"
         android:text="Tel: "
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
@@ -197,12 +200,12 @@
 
     <TextView
         android:id="@+id/teleTV"
-        android:layout_width="38dp"
-        android:layout_height="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="3dp"
         android:text="Tel"
-        android:textSize="10sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.011"
