@@ -67,9 +67,10 @@ public class PlayerProfile extends AppCompatActivity {
                 maxQRDisp.setText("Unique QR max: " + String.valueOf(user.getUniqueqr()));
                 totalNumQRTV.setText("Total # of QR codes: "+String.valueOf(user.getTotalscannedqr()));
                 totalSumQRTV.setText("Total Sum of QR codes: "+String.valueOf(user.getTotalsum()));
-                userStorage.getCol().get().addOnCompleteListener((task) -> {
-                    if(task.isSuccessful()) {
-                        QuerySnapshot snapshot = task.getResult();
+                userStorage.getCol().addSnapshotListener((task, error) -> {
+                    if(error != null) return;
+                    if(task != null) {
+                        QuerySnapshot snapshot = task;
                         ArrayList<User> dataRanking = new ArrayList<>();
                         if(snapshot != null) {
                             for (QueryDocumentSnapshot document : snapshot) {
@@ -97,9 +98,9 @@ public class PlayerProfile extends AppCompatActivity {
                             }
                             rankQR++;
                         }
-                        uniqueQRRankTV.setText("Unique QR Ranking: "+String.valueOf(rankQR));
-                        totalNumRank.setText("Total Scanned Ranking: "+ String.valueOf(rankScanned));
-                        totalSumRank.setText("Total Sum Ranking: " + String.valueOf(rankSum));
+                        uniqueQRRankTV.setText("Unique QR Rank: "+String.valueOf(rankQR));
+                        totalNumRank.setText("Total Scanned Rank: "+ String.valueOf(rankScanned));
+                        totalSumRank.setText("Total Sum Rank: " + String.valueOf(rankSum));
                     }
                 });
             }

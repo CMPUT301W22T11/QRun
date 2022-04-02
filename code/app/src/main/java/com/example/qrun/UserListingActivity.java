@@ -73,19 +73,20 @@ public class UserListingActivity extends AppCompatActivity {
         userDataList.clear();
         if(queryDocumentSnapshots != null) {
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                if(document.getId() != username) {
+                if(document.getId().compareTo(username) != 0) {
                     userDataList.add(new User(document));
                 }
             }
             switch(ranking) {
                 case 0:
-                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getTotalscannedqr(), f1.getTotalscannedqr()));
+                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getUniqueqr(), f1.getUniqueqr()));
                     break;
                 case 1:
                     Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getTotalsum(), f1.getTotalsum()));
                     break;
                 case 2:
-                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getUniqueqr(), f1.getUniqueqr()));
+
+                    Collections.sort(userDataList, (f1, f2) -> Long.compare(f2.getTotalscannedqr(), f1.getTotalscannedqr()));
                     break;
             }
             userAdapter.notifyDataSetChanged();

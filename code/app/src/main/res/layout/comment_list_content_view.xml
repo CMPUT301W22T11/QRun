@@ -10,7 +10,7 @@
         android:id="@+id/uid_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="2015dp"
+        android:padding="20dp"
         android:text="User"
         android:textSize="15sp">
     </TextView>
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/comment_text"
         android:textSize="15sp"
-        android:maxLength="12"
+        android:maxLength="30"
         android:layout_marginLeft="20dp"
         android:text="Comment">
     </TextView>
