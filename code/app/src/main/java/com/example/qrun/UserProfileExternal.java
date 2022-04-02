@@ -92,8 +92,8 @@ public class UserProfileExternal extends AppCompatActivity {
                 emailTV.setText(user.getEmail());
                 telTV.setText(user.getPhoneNumber());
                 maxQRDisp.setText("Unique QR max: " + String.valueOf(user.getUniqueqr()));
-                totalNumQRTV.setText("Total # of QR codes: "+String.valueOf(user.getTotalscannedqr()));
-                totalSumQRTV.setText("Total Sum of QR codes: "+String.valueOf(user.getTotalsum()));
+                totalNumQRTV.setText("Total Scanned: "+String.valueOf(user.getTotalscannedqr()));
+                totalSumQRTV.setText("Total Sum : "+String.valueOf(user.getTotalsum()));
                 userStorage.getCol().addSnapshotListener((task, error) -> {
                     if(task != null) {
                         QuerySnapshot snapshot = task;
