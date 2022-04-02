@@ -55,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
     private LocationManager locationManager;
     private ArrayList<QRGame> points = new ArrayList<>();
-    private HashMap<Marker, String> images = new HashMap<>();
+    private HashMap<Marker, QRGame> images = new HashMap<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     FirebaseFirestore QrRun;
     Marker preferredQrMarker;
@@ -138,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     );
                                     Log.d("Storage get", "-------------------------------------------------------" + add.toString());
                                     Log.d("Storage get", "-------------------------------------------------------" + String.valueOf(qr.getPoints()));
-                                    images.put(marker, qr.getPath());
+                                    images.put(marker, qr);
                                     markers.add(marker);
 
                                 }
