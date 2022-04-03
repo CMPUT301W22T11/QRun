@@ -6,7 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -16,8 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.QRun">
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
 
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -33,7 +39,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDpzKbPB9MALOTmkQAqkHmmfZoj6Q8m18k" />
-
         <activity
             android:name=".ImageCompressionActivity"
             android:exported="false" />
@@ -73,12 +78,10 @@
         <activity
             android:name=".QrSummary"
             android:exported="false" />
-
         <activity
             android:name=".MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
-
     </application>
 
 </manifest>
