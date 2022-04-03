@@ -43,21 +43,12 @@ public class CustomComment extends ArrayAdapter<Comment> {
 
         Comment comment = comments.get(position);
 
-
-            String temp;
-            temp=comment.getComment();
-            while(temp.length()>253){
-                temp=temp.substring(0,temp.length()-1);
-            }
-            temp=temp+"...";
-
-
         TextView userId = view.findViewById(R.id.uid_text);
         TextView commentText = view.findViewById(R.id.comment_text);
 
         userId.setText(comment.getUid());
 
-        commentText.setText(temp);
+        commentText.setText(comment.getComment());
 
         return view;
     }

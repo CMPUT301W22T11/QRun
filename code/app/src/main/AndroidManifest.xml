@@ -34,7 +34,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDpzKbPB9MALOTmkQAqkHmmfZoj6Q8m18k" />
 
-
+        <activity
+            android:name=".ImageCompressionActivity"
+            android:exported="false" />
         <activity
             android:name=".UserListingActivity"
             android:exported="false" />
