@@ -38,8 +38,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
-public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFragmentInteractionListener, LocationListener {
+public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFragmentInteractionListener, LocationListener, Consumer<Location> {
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -102,7 +103,7 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         setContentView(R.layout.activity_add_game_qr);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,this);
         ctx = this;
         cancelbut = findViewById(R.id.cancelbutton_id);
         addbut = findViewById(R.id.addbutton_id);
@@ -245,5 +246,10 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
         } else {
             //Show snackbar
         }
+    }
+
+    @Override
+    public void accept(Location location) {
+        position = new LatLng(location.getLatitude(), location.getLongitude());
     }
 }
