@@ -19,12 +19,15 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/profileBut"
-
         android:title="Profile"
         app:showAsAction="never" />
     <item
+        android:id="@+id/adminBut"
+        android:title="Admin"
+        android:visible="false"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/logoutBut"
-
         android:title="Logout"
         app:showAsAction="never" />
 
