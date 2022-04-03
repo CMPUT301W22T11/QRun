@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.qrun.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -40,6 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HashMap<Marker, QRGame> images = new HashMap<>();
     private ArrayList<Marker> markers = new ArrayList<>();
     FirebaseFirestore QrRun;
+    LatLng me;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -57,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
 
         QRStorage storage = new QRStorage(FirebaseFirestore.getInstance());
@@ -88,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+
 
         //get the QRs from storage
         QrRun.collection("QR").get()
@@ -125,12 +128,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Log.d("Storage get", "Could not retrieve data", task.getException());
                         }
                     }
+
                 }));
 
 
 
-
-
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(56.130366, -106.346771)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(37.422131, -122.084801)));
 
 
 
@@ -139,7 +143,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        LatLng me = new LatLng(location.getLatitude(), location.getLongitude());
+        me = new LatLng(location.getLatitude(), location.getLongitude());
+
 
 
     }
