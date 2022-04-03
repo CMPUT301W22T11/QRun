@@ -179,29 +179,35 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                                 StorageReference ref = FirebaseStorage.getInstance().getReference();
                                 StorageReference imagesRef = ref.child(id + ".jpg");
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                CompressionValStore compressionValue = CompressionValStore.getInstance();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100-compressionValue.getValue(), baos);
-                                byte[] dataImg = baos.toByteArray();
-                                UploadTask uploadTask = imagesRef.putBytes(dataImg);
-                                uploadTask.addOnCompleteListener((l) -> {
-                                    data.put("PicPath", id + ".jpg");
-                                    storage.add(id, data, (isComplete) -> {
-                                        if(isComplete) {
-                                            user.updateUser(qr.getUsername(), storage, (isSuccess) -> {
-                                                if(isSuccess) {
-                                                    Intent intent = new Intent();
-                                                    setResult(1, intent);
-                                                    finish();
-                                                }
-                                                else {
-                                                    ErrorFinish();
-                                                }
-                                            });
-                                        }
-                                        else {
-                                            ErrorFinish();
-                                        }
-                                    });
+                                new UserStorage(FirebaseFirestore.getInstance()).getCol()
+                                        .whereEqualTo("isOwner", true)
+                                        .get().addOnSuccessListener((data1) -> {
+                                            int compressionVal = (int)(100 - (long)data1.getDocuments().get(0).get("Compression"));
+                                            Log.d("Compression Getter", "Compression Value is: " + String.valueOf(compressionVal));
+                                            bitmap.compress(Bitmap.CompressFormat.JPEG, compressionVal, baos);
+                                            byte[] dataImg = baos.toByteArray();
+                                            UploadTask uploadTask = imagesRef.putBytes(dataImg);
+                                            uploadTask.addOnCompleteListener((l) -> {
+                                                data.put("PicPath", id + ".jpg");
+                                                storage.add(id, data, (isComplete) -> {
+                                                    if(isComplete) {
+                                                        user.updateUser(qr.getUsername(), storage, (isSuccess) -> {
+                                                            if(isSuccess) {
+                                                                Intent intent = new Intent();
+                                                                setResult(1, intent);
+                                                                finish();
+                                                            }
+                                                            else {
+                                                                ErrorFinish();
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        ErrorFinish();
+                                                    }
+                                                });
+                                        });
+
                                 }).addOnFailureListener((l) -> ErrorFinish());
                             }
                             else {

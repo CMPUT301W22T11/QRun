@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +35,7 @@ import java.util.Map;
  */
 public class MainScreen extends AppCompatActivity {
     private final static int SUCCESS = 0;
+    MenuItem item;
     SharedPreferences prefs;
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -43,7 +45,7 @@ public class MainScreen extends AppCompatActivity {
                     // if result is 1, then update the list
                     if(result.getResultCode() == 1) {
                         Log.d("add QR()", "Add QR Successfully");
-                        Toast.makeText(ctx, "ADD QR Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ctx, "Add QR Successfully", Toast.LENGTH_SHORT).show();
                     }
                     else {
                         Log.d("add QR()", "Failed to Add QR");
@@ -68,14 +70,15 @@ public class MainScreen extends AppCompatActivity {
     String userName;
     ImageView qrCodeImage;
     Context ctx;
+    UserStorage userStorage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION}, SUCCESS);
         setContentView(R.layout.activity_main_screen);
         ctx = this;
+        item = findViewById(R.id.adminBut);
         qrCodeImage =  (ImageView) findViewById(R.id.qrCodeImage);
         Bundle extras = getIntent().getExtras();
         cameraBut = findViewById(R.id.cameraButton);
@@ -83,14 +86,13 @@ public class MainScreen extends AppCompatActivity {
                 "com.example.app", Context.MODE_PRIVATE); // Get the Shared preferences
         userName = prefs.getString("usrName", null);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        UserStorage userStorage = new UserStorage(db);
+        userStorage = new UserStorage(db);
+
         QRGenerator qrCodeGen = new QRGenerator();
         Bitmap qrGen= qrCodeGen.generateQRBitmap(userName,this);
         qrCodeImage=(ImageView) findViewById(R.id.qrCodeImage);
         qrCodeImage.setImageBitmap(qrGen);
-
         mapsButton = findViewById(R.id.mapButton);
-
         mapsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +120,21 @@ public class MainScreen extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
+        item = menu.findItem(R.id.adminBut);
+        userStorage.get(userName, (data) -> {
+            if(data != null) {
+
+                Object temp = data.get("isOwner");
+                if (temp != null) {
+                    boolean isOwner = (boolean) temp;
+                    if (isOwner) {
+                        item.setVisible(true);
+                    } else {
+                        item.setVisible(false);
+                    }
+                }
+            }
+        });
         return true;
     }
 
@@ -150,17 +167,14 @@ public class MainScreen extends AppCompatActivity {
                 finish();
                 break;
             }
+            case R.id.adminBut: {
+                Intent intent = new Intent(this, ImageCompressionActivity.class);
+                intent.putExtra("userName", userName);
+                startActivity(intent);
+                break;
+            }
+
         }
         return super.onOptionsItemSelected(item);
-    }
-    public void testCompression(View view){
-        Intent intent = new Intent(this, ImageCompressionActivity.class);
-        startActivity(intent);
-    }
-    public void testOutput(View view){
-        CompressionValStore compressionValue = CompressionValStore.getInstance();
-
-        Log.v("xx",String.valueOf(compressionValue.getValue()));
-
     }
 }
