@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
+//The test requires the device must has been login before
 public class LogoutTest {
     private Solo solo;
     FirebaseFirestore db;
