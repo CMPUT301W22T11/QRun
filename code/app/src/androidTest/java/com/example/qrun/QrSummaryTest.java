@@ -1,13 +1,27 @@
 package com.example.qrun;
 
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anything;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.annotation.ContentView;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -18,67 +32,47 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+@RunWith(AndroidJUnit4.class)
 
 public class QrSummaryTest {
-    private Solo solo;
+    static final String userForTest = "sysys";
     @Rule
-    public ActivityTestRule<QRGameListActivity> rule =
-            new ActivityTestRule<>(QRGameListActivity.class, true, true);
-    @Before
-    public void setup() throws Exception{
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-    }
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
-    }
+    public ActivityTestRule<QrSummary> rule =
+            new ActivityTestRule<QrSummary>(QrSummary.class, true, true) {
+                @Override
+                protected Intent getActivityIntent() {
+                    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+                    Intent result = new Intent(targetContext, QrSummary.class);
+                    result.putExtra("userName", userForTest);
+                    result.putExtra("hexString","68410665196df4ea65cdb5fcd491b845478df24657657abc35184299513a0142");
+                    return result;
+                }
+            };
     @Test
     public void checkAdd(){
-        solo.assertCurrentActivity("Wrong Activity", QRGameListActivity.class);
-        solo.clickInList(0);
-        solo.assertCurrentActivity("Wrong Activity",QrSummary.class);
-        solo.clickOnView(solo.getView(R.id.add_comment));//Click ADD COMMENT Button
-        solo.waitForDialogToOpen();
-        solo.enterText((EditText) solo.getView(R.id.comment_text), "Comment test");//Enter test comment
-        solo.clickOnButton("Cancel"); //Select Cancel Button
-        assertFalse(solo.searchText("Comment test"));
-
-        solo.clickOnView(solo.getView(R.id.add_comment));//Click ADD COMMENT Button
-        solo.waitForDialogToOpen();
-        solo.enterText((EditText) solo.getView(R.id.comment_text), "Comment test");//Enter test comment
-        solo.clickOnButton("OK"); //Select Cancel Button
-        assertTrue(solo.searchText("Comment test"));
-//        QrSummary activity = (QrSummary) solo.getCurrentActivity();
-//        final ListView comments = activity.findViewById(R.id.comment_list); // Get the listview
-//        String comment = (String) comments.get; // Get item from first position
-//        assertEquals("Comment test", comment);
+        onView(withId(R.id.add_comment)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_comment)).perform(ViewActions.click());
+        onView(withId(R.id.comment_text)).perform(ViewActions.typeText("Comment Test"));
+        onView(withText("Cancel")).perform(ViewActions.click());
+        onView(withText("Comment Test")).check(doesNotExist());
+        onView(withId(R.id.add_comment)).perform(ViewActions.click());
+        onView(withId(R.id.comment_text)).perform(ViewActions.typeText("Comment Test"));
+        onView(withText("OK")).perform(ViewActions.click());
+        onView(withText("Comment Test")).check(matches(isDisplayed()));
     }
     @Test
     public void checkView(){
-        solo.assertCurrentActivity("Wrong Activity", QRGameListActivity.class);
-        solo.clickInList(0);
-        solo.assertCurrentActivity("Wrong Activity",QrSummary.class);
-        solo.clickOnView(solo.getView(R.id.add_comment));//Click ADD COMMENT Button
-        solo.enterText((EditText) solo.getView(R.id.comment_text), "Comment test");//Enter test comment
-        solo.clickOnButton("OK"); //Select Cancel Button
-        solo.clickInList(1,1);
-        solo.waitForDialogToOpen();//Check if add comment dialog is displayed
-        assertTrue("Comment is not displayed properly", solo.searchText("Comment test"));//check if comment is properly displayed
-        solo.clickOnButton("Finish");//finish viewing
-        solo.assertCurrentActivity("Fail to close view",QrSummary.class);//check if dialog closed
-    }
-    @Test
-    public void deleteQr(){
-        solo.assertCurrentActivity("Wrong Activity", QRGameListActivity.class);
-        solo.clickInList(0);
-        solo.assertCurrentActivity("Wrong Activity",QrSummary.class);
-        solo.clickOnView(solo.getView(R.id.deleteQr));
-        solo.assertCurrentActivity("Wrong Activity", QRGameListActivity.class);
+        onView(withId(R.id.add_comment)).perform(ViewActions.click());
+        onView(withId(R.id.comment_text)).perform(ViewActions.typeText("Comment Test"));
+        onView(withText("OK")).perform(ViewActions.click());
+        onData(anything()).inAdapterView(withId(R.id.comment_list)).atPosition(0).
+                onChildView(withId(R.id.comment_text)).check(matches(withText("Comment Test"))).perform(ViewActions.click());
+        onView(withText("Comment Test")).check(matches(isDisplayed()));
     }
 
-    @After
-    public void tearDown() throws Exception{
-        solo.finishOpenedActivities();
-    }
+
 
 }
