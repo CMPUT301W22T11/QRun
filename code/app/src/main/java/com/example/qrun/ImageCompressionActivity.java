@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
+/**
+ * This is an activity to manually change the slider
+ */
 public class ImageCompressionActivity extends AppCompatActivity {
     SeekBar seekBar;
     TextView seekBarTV;
@@ -49,8 +53,6 @@ public class ImageCompressionActivity extends AppCompatActivity {
                         });
                     }
                 });
-//                CompressionValStore compressionValue = CompressionValStore.getInstance();
-//                compressionValue.setValue(i);
             }
 
             @Override
@@ -63,11 +65,5 @@ public class ImageCompressionActivity extends AppCompatActivity {
 
             }
         });
-    }
-    public void returnHome(View view){ // remove this code
-        String name = "test";
-        Intent intent = new Intent(this, MainScreen.class);
-        intent.putExtra("userName",name);
-        startActivity(intent);
     }
 }

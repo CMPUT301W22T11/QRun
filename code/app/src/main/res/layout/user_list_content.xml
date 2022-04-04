@@ -8,20 +8,19 @@
 
     <TextView
         android:id="@+id/rank"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:maxLength="12"
         android:padding="10dp"
-        android:text="City"
+        android:text="Rank"
         android:textSize="20sp"></TextView>
 
     <TextView
         android:id="@+id/usernameContent"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
         android:padding="10dp"
-        android:text="Province"
+        android:text="User"
         android:textSize="20sp"></TextView>
 
 

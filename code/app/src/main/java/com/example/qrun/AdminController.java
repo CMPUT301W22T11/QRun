@@ -11,6 +11,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
+
+/**
+ * This class will handle the general Admin such as QR Batch Deletion as well as User Deletion
+ */
 public class AdminController {
     Integer numberOfQR = 0;
     QRStorage qrStorage;

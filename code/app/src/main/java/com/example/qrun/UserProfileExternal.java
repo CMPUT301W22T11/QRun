@@ -144,7 +144,6 @@ public class UserProfileExternal extends AppCompatActivity {
         emailTV= findViewById(R.id.emailTV);
         telTV= findViewById(R.id.teleTV);
         deleteAdmin = findViewById(R.id.deleteUserAdmin);
-//        streetAddressTV= findViewById(R.id.streetAddressTV);
         nameTV.setText("Gewgwegwegweg");
         QRList = findViewById(R.id.qrlist);
         qrDataList = new ArrayList<>();

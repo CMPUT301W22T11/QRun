@@ -145,10 +145,10 @@ public class UserListingActivity extends AppCompatActivity {
              }
              else {
                  if(listener != null) listener.remove();
-                 storage.getCol().document(userName).addSnapshotListener((task, error) -> {
+                 listener = storage.getCol().document(userName).addSnapshotListener((task, error) -> {
                      if(error != null) return;
                      userDataList.clear();
-                     if(task != null) {
+                     if(task != null && task.exists()) {
                          userDataList.add(new User(task));
                      }
                      userAdapter.notifyDataSetChanged();

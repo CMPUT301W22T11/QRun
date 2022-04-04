@@ -40,6 +40,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+
+/**
+ * This class is an activity to add game qr
+ */
 public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFragmentInteractionListener, LocationListener, Consumer<Location> {
     private ActivityResultLauncher<Intent> ac = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -76,8 +80,6 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
                         } else {
                             ErrorFinish();
                         }
-
-
                     }
                 }
 
@@ -87,9 +89,9 @@ public class AddGameQR extends AppCompatActivity implements MapPointPopup.OnFrag
     QRGame qr = null;
     private Button cancelbut, addbut, scanbut;
     private TextView hashId, pointsId;
-    private String path = ""; // TODO: modify this when we can take picture
-    private Double lat = null; //TODO: modify this when we have an actual map
-    private Double lon = null; //TODO: modify this when we have an actual map
+    private String path = "";
+    private Double lat = null;
+    private Double lon = null;
     private String username;
     private Context ctx;
     private LocationManager locationManager;

@@ -49,6 +49,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * This is the map activity when click on "Map" in MainScreen
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, ImagePopup.OnFragmentInteractionListener {
 
     private GoogleMap mMap;

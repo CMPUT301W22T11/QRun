@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
     private void login(@NonNull String username) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         UserStorage store = new UserStorage(db);
-        store.get(username, (check) -> {
+        store.get(username, (check) -> { // Check if username exists or already deleted by Admin
             if(check != null) {
                 Log.d("Login", username);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements SignupFragment.On
                 Intent intent = new Intent(this, MainScreen.class);
                 intent.putExtra("userName",username);
                 startActivity(intent);
-//                onOkPressed(username);
             }
         });
     }
