@@ -37,16 +37,16 @@ public class UserCustomList extends ArrayAdapter<User> {
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.qr_list_content, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.user_list_content, parent,false);
         }
 
         User user = UserGameList.get(position);
 
-        TextView qrHash = view.findViewById(R.id.qrhash);
-        TextView qrPoints = view.findViewById(R.id.qrpoint);
+        TextView qrHash = view.findViewById(R.id.rank);
+        TextView qrPoints = view.findViewById(R.id.usernameContent);
 
-        qrHash.setText(user.getUsername());
-        qrPoints.setText("");
+        qrHash.setText(String.valueOf(position + 1));
+        qrPoints.setText(user.getUsername());
         return view;
 
     }

@@ -67,6 +67,7 @@ public class PlayerProfile extends AppCompatActivity {
                 maxQRDisp.setText("Unique QR max: " + String.valueOf(user.getUniqueqr()));
                 totalNumQRTV.setText("Total # of QR codes: "+String.valueOf(user.getTotalscannedqr()));
                 totalSumQRTV.setText("Total Sum of QR codes: "+String.valueOf(user.getTotalsum()));
+                // Rank the user
                 userStorage.getCol().addSnapshotListener((task, error) -> {
                     if(error != null) return;
                     if(task != null) {
@@ -98,8 +99,8 @@ public class PlayerProfile extends AppCompatActivity {
                             }
                             rankQR++;
                         }
-                        uniqueQRRankTV.setText("Unique QR Rank: "+String.valueOf(rankQR));
-                        totalNumRank.setText("Total Scanned Rank: "+ String.valueOf(rankScanned));
+                        uniqueQRRankTV.setText("Unique QR Rank: " + String.valueOf(rankQR));
+                        totalNumRank.setText("Total Scanned Rank: " + String.valueOf(rankScanned));
                         totalSumRank.setText("Total Sum Rank: " + String.valueOf(rankSum));
                     }
                 });

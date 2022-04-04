@@ -22,6 +22,10 @@ import com.google.firebase.storage.StorageReference;
 
 import javax.annotation.Nullable;
 
+
+/**
+ * This class will handle the image popup for selecting the QR in the Map
+ */
 public class ImagePopup extends AppCompatDialogFragment {
 
     private OnFragmentInteractionListener listener;

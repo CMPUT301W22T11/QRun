@@ -19,9 +19,9 @@
     <string name="delete_current_qr_code">Delete current Qr code</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string-array name="rank">
-        <item>Unique QR</item>
-        <item>Total Sum</item>
-        <item>Total Scanned</item>
+        <item>Unique QR Rank</item>
+        <item>Total Sum Rank</item>
+        <item>Total Scanned Rank</item>
     </string-array>
     <string-array name="isAdmin">
         <item>User Mode </item>

@@ -13,10 +13,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import javax.annotation.Nullable;
 
+
+/**
+ * This class will handle the map point
+ */
 public class MapPointPopup extends AppCompatDialogFragment {
-
-
-
 
     private OnFragmentInteractionListener listener;
 
