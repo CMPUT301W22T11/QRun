@@ -28,20 +28,6 @@ public class UserStorage extends Storage{
     public UserStorage(FirebaseFirestore db) {
         super(db,"User");
     }
-    public void sortBy(String sortField, Query.Direction dir, @NonNull getSortedArray<User> comp){
-        ArrayList<User> list = new ArrayList<User>();
-        collectionReference.orderBy(sortField, dir).get().addOnCompleteListener((task) -> {
-                if (task.isSuccessful()) {
-                    for(QueryDocumentSnapshot document : task.getResult()) {
-                        list.add(new User(document));
-                    }
-                    comp.getData(list);
-                } else {
-                    Log.d("Storage get()", "get failed with ", task.getException());
-                    comp.getData(null);
-                }
-        });
-    }
     public void updateUser(@NonNull String username, @NonNull QRStorage qrStorage, @NonNull StoreOnComplete fn) {
         this.get(username, (userData) -> {
             if(userData != null) {
