@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 public class QRCalculation {
     /**
      * Hash the strings
+     * Reference: https://www.baeldung.com/sha-256-hashing-java
      * @param input the raw string
      * @return the raw bytes after hashed
      * @throws NoSuchAlgorithmException
@@ -23,6 +24,7 @@ public class QRCalculation {
 
     /**
      * Convert Byte to hex String
+     * Reference: https://www.baeldung.com/sha-256-hashing-java
      * @param hash the raw hash data
      * @return the String modified hash
      */

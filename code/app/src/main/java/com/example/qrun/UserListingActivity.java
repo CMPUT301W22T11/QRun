@@ -140,7 +140,7 @@ public class UserListingActivity extends AppCompatActivity {
                  if(listener != null) listener.remove();
                  listener = storage.getCol().addSnapshotListener((task, error) -> {
                      if(error != null) return;
-                    getData(task, choose);
+                     getData(task, choose);
                  });
              }
              else {
