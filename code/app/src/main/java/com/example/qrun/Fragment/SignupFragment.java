@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -72,26 +74,33 @@ public class SignupFragment extends DialogFragment {
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         UserStorage store = new UserStorage(db);
                         CollectionReference col = store.getCol();
-                        store.get(username, (check) -> {
-                            if(check == null) {
-                                HashMap<String, String> preData = new HashMap<>();
-                                preData.put("name", name);
-                                preData.put("email", email);
-                                preData.put("phone", phone);
-                                store.add(username, preData, (boolean isTrue) -> {
-                                    if(isTrue) {
-                                        listener.onOkPressed(username);
-                                    }
-                                    else {
-                                        listener.onOkPressed(null);
-                                    }
-                                });
-                            }
-                            else {
-                                listener.onOkPressed(null);
-                            }
-                        });
-
+                        Log.d("name", name);
+                        Log.d("email", email);
+                        Log.d("phone", phone);
+                        if(username.length() != 0) {
+                            store.get(username, (check) -> {
+                                if(check == null) {
+                                    HashMap<String, String> preData = new HashMap<>();
+                                    preData.put("name", name);
+                                    preData.put("email", email);
+                                    preData.put("phone", phone);
+                                    store.add(username, preData, (boolean isTrue) -> {
+                                        if(isTrue) {
+                                            listener.onOkPressed(username);
+                                        }
+                                        else {
+                                            listener.onOkPressed(null);
+                                        }
+                                    });
+                                }
+                                else {
+                                    listener.onOkPressed(null);
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Username is empty", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }).create();
     }
